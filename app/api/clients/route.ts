@@ -1,23 +1,31 @@
 import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { hashPassword } from "@/lib/auth";
-import { requireAdmin } from "@/lib/auth";
+import { supabase } from "@/lib/supabase";
+import { hashPassword, requireAdmin } from "@/lib/auth";
+import { randomUUID } from "crypto";
 
 export async function GET() {
   await requireAdmin();
-  const clients = await prisma.client.findMany({
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      company: true,
-      phone: true,
-      createdAt: true,
-      _count: { select: { projects: true, invoices: true } },
+  const { data: clients, error } = await supabase
+    .from("Client")
+    .select("id, email, name, company, phone, createdAt, projects:Project(count), invoices:Invoice(count)")
+    .order("createdAt", { ascending: false });
+
+  if (error) return Response.json({ error: error.message }, { status: 500 });
+
+  const result = (clients ?? []).map((c: any) => ({
+    id: c.id,
+    email: c.email,
+    name: c.name,
+    company: c.company,
+    phone: c.phone,
+    createdAt: c.createdAt,
+    _count: {
+      projects: c.projects?.[0]?.count ?? 0,
+      invoices: c.invoices?.[0]?.count ?? 0,
     },
-  });
-  return Response.json(clients);
+  }));
+
+  return Response.json(result);
 }
 
 export async function POST(req: NextRequest) {
@@ -29,10 +37,13 @@ export async function POST(req: NextRequest) {
   }
 
   const hashed = await hashPassword(password);
-  const client = await prisma.client.create({
-    data: { email, name, company, phone, password: hashed },
-    select: { id: true, email: true, name: true, company: true, phone: true, createdAt: true },
-  });
+  const now = new Date().toISOString();
+  const { data: client, error } = await supabase
+    .from("Client")
+    .insert({ id: randomUUID(), email, name, company, phone, password: hashed, createdAt: now, updatedAt: now })
+    .select("id, email, name, company, phone, createdAt")
+    .single();
 
+  if (error) return Response.json({ error: error.message }, { status: 500 });
   return Response.json(client, { status: 201 });
 }

@@ -1,11 +1,12 @@
 import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { supabase } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/auth";
 
 export async function DELETE(_req: NextRequest, ctx: RouteContext<"/api/invoices/[id]">) {
   await requireAdmin();
   const { id } = await ctx.params;
-  await prisma.invoice.delete({ where: { id } });
+  const { error } = await supabase.from("Invoice").delete().eq("id", id);
+  if (error) return Response.json({ error: error.message }, { status: 500 });
   return Response.json({ success: true });
 }
 
@@ -14,22 +15,22 @@ export async function PUT(req: NextRequest, ctx: RouteContext<"/api/invoices/[id
   const { id } = await ctx.params;
   const { number, amount, clientId, projectId, status, dueAt, paidAt } = await req.json();
 
-  const invoice = await prisma.invoice.update({
-    where: { id },
-    data: {
+  const { data: invoice, error } = await supabase
+    .from("Invoice")
+    .update({
       number,
       amount: parseFloat(amount),
       clientId,
       projectId: projectId || null,
       status,
-      dueAt: new Date(dueAt),
-      paidAt: paidAt ? new Date(paidAt) : null,
-    },
-    include: {
-      client: { select: { id: true, name: true, company: true } },
-      project: { select: { id: true, title: true } },
-    },
-  });
+      dueAt: new Date(dueAt).toISOString(),
+      paidAt: paidAt ? new Date(paidAt).toISOString() : null,
+      updatedAt: new Date().toISOString(),
+    })
+    .eq("id", id)
+    .select("*, client:Client(id, name, company), project:Project(id, title)")
+    .single();
 
+  if (error) return Response.json({ error: error.message }, { status: 500 });
   return Response.json(invoice);
 }

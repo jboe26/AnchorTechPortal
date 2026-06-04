@@ -1,13 +1,16 @@
 import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { supabase } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/auth";
+import { randomUUID } from "crypto";
 
 export async function GET() {
   await requireAdmin();
-  const projects = await prisma.project.findMany({
-    orderBy: { createdAt: "desc" },
-    include: { client: { select: { id: true, name: true, company: true } } },
-  });
+  const { data: projects, error } = await supabase
+    .from("Project")
+    .select("*, client:Client(id, name, company)")
+    .order("createdAt", { ascending: false });
+
+  if (error) return Response.json({ error: error.message }, { status: 500 });
   return Response.json(projects);
 }
 
@@ -19,17 +22,23 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: "Title and client are required" }, { status: 400 });
   }
 
-  const project = await prisma.project.create({
-    data: {
+  const now = new Date().toISOString();
+  const { data: project, error } = await supabase
+    .from("Project")
+    .insert({
+      id: randomUUID(),
       title,
       description,
       clientId,
       status: status ?? "in_progress",
-      startDate: startDate ? new Date(startDate) : null,
-      endDate: endDate ? new Date(endDate) : null,
-    },
-    include: { client: { select: { id: true, name: true, company: true } } },
-  });
+      startDate: startDate ? new Date(startDate).toISOString() : null,
+      endDate: endDate ? new Date(endDate).toISOString() : null,
+      createdAt: now,
+      updatedAt: now,
+    })
+    .select("*, client:Client(id, name, company)")
+    .single();
 
+  if (error) return Response.json({ error: error.message }, { status: 500 });
   return Response.json(project, { status: 201 });
 }

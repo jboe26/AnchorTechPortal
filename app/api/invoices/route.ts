@@ -1,16 +1,16 @@
 import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { supabase } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/auth";
+import { randomUUID } from "crypto";
 
 export async function GET() {
   await requireAdmin();
-  const invoices = await prisma.invoice.findMany({
-    orderBy: { createdAt: "desc" },
-    include: {
-      client: { select: { id: true, name: true, company: true } },
-      project: { select: { id: true, title: true } },
-    },
-  });
+  const { data: invoices, error } = await supabase
+    .from("Invoice")
+    .select("*, client:Client(id, name, company), project:Project(id, title)")
+    .order("createdAt", { ascending: false });
+
+  if (error) return Response.json({ error: error.message }, { status: 500 });
   return Response.json(invoices);
 }
 
@@ -22,20 +22,24 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: "Number, amount, client, and due date are required" }, { status: 400 });
   }
 
-  const invoice = await prisma.invoice.create({
-    data: {
+  const now = new Date().toISOString();
+  const { data: invoice, error } = await supabase
+    .from("Invoice")
+    .insert({
+      id: randomUUID(),
       number,
       amount: parseFloat(amount),
       clientId,
       projectId: projectId || null,
       status: status ?? "unpaid",
-      dueAt: new Date(dueAt),
-    },
-    include: {
-      client: { select: { id: true, name: true, company: true } },
-      project: { select: { id: true, title: true } },
-    },
-  });
+      dueAt: new Date(dueAt).toISOString(),
+      issuedAt: now,
+      createdAt: now,
+      updatedAt: now,
+    })
+    .select("*, client:Client(id, name, company), project:Project(id, title)")
+    .single();
 
+  if (error) return Response.json({ error: error.message }, { status: 500 });
   return Response.json(invoice, { status: 201 });
 }

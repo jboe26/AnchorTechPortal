@@ -1,16 +1,15 @@
 import { requireClient } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { supabase } from "@/lib/supabase";
 import { Briefcase, FileText, CreditCard, LogOut } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
-const projectStatusConfig = {
+const projectStatusConfig: Record<string, { label: string; className: string }> = {
   in_progress: { label: "In Progress", className: "bg-blue-100 text-blue-700" },
   completed: { label: "Completed", className: "bg-green-100 text-green-700" },
   on_hold: { label: "On Hold", className: "bg-amber-100 text-amber-700" },
 };
 
-const invoiceStatusConfig = {
+const invoiceStatusConfig: Record<string, { label: string; className: string }> = {
   unpaid: { label: "Unpaid", className: "bg-amber-100 text-amber-700" },
   paid: { label: "Paid", className: "bg-green-100 text-green-700" },
   overdue: { label: "Overdue", className: "bg-red-100 text-red-700" },
@@ -19,22 +18,25 @@ const invoiceStatusConfig = {
 export default async function ClientDashboard() {
   const session = await requireClient();
 
-  const client = await prisma.client.findUnique({
-    where: { id: session.userId },
-    include: {
-      projects: { orderBy: { createdAt: "desc" } },
-      invoices: { orderBy: { createdAt: "desc" } },
-      retainers: { orderBy: { createdAt: "desc" } },
-    },
-  });
+  const [
+    { data: client },
+    { data: projects },
+    { data: invoices },
+    { data: retainers },
+  ] = await Promise.all([
+    supabase.from("Client").select("id, email, name, company, phone").eq("id", session.userId).single(),
+    supabase.from("Project").select("*").eq("clientId", session.userId).order("createdAt", { ascending: false }),
+    supabase.from("Invoice").select("*").eq("clientId", session.userId).order("createdAt", { ascending: false }),
+    supabase.from("Retainer").select("*").eq("clientId", session.userId).order("createdAt", { ascending: false }),
+  ]);
 
   if (!client) return <div className="p-8 text-slate-500">Client not found.</div>;
 
-  const unpaidAmount = client.invoices
-    .filter((i) => i.status !== "paid")
-    .reduce((s, i) => s + i.amount, 0);
+  const unpaidAmount = (invoices ?? [])
+    .filter((i: any) => i.status !== "paid")
+    .reduce((s: number, i: any) => s + i.amount, 0);
 
-  const activeRetainer = client.retainers.find((r) => r.status === "active");
+  const activeRetainer = (retainers ?? []).find((r: any) => r.status === "active");
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -80,7 +82,7 @@ export default async function ClientDashboard() {
               <Briefcase className="w-4 h-4 text-blue-500" />
             </div>
             <p className="text-2xl font-bold text-slate-900">
-              {client.projects.filter((p) => p.status === "in_progress").length}
+              {(projects ?? []).filter((p: any) => p.status === "in_progress").length}
             </p>
           </div>
           <div className="bg-white rounded-xl border border-slate-200 p-5">
@@ -106,12 +108,12 @@ export default async function ClientDashboard() {
             <div className="p-5 border-b border-slate-100">
               <h2 className="font-semibold text-slate-900">Projects</h2>
             </div>
-            {client.projects.length === 0 ? (
+            {(projects ?? []).length === 0 ? (
               <div className="p-8 text-center text-slate-400 text-sm">No projects yet.</div>
             ) : (
               <div className="divide-y divide-slate-50">
-                {client.projects.map((p) => {
-                  const { label, className } = projectStatusConfig[p.status];
+                {(projects ?? []).map((p: any) => {
+                  const { label, className } = projectStatusConfig[p.status] ?? { label: p.status, className: "bg-slate-100 text-slate-700" };
                   return (
                     <div key={p.id} className="px-5 py-3 flex items-center justify-between">
                       <div>
@@ -130,12 +132,12 @@ export default async function ClientDashboard() {
             <div className="p-5 border-b border-slate-100">
               <h2 className="font-semibold text-slate-900">Invoices</h2>
             </div>
-            {client.invoices.length === 0 ? (
+            {(invoices ?? []).length === 0 ? (
               <div className="p-8 text-center text-slate-400 text-sm">No invoices yet.</div>
             ) : (
               <div className="divide-y divide-slate-50">
-                {client.invoices.map((inv) => {
-                  const { label, className } = invoiceStatusConfig[inv.status];
+                {(invoices ?? []).map((inv: any) => {
+                  const { label, className } = invoiceStatusConfig[inv.status] ?? { label: inv.status, className: "bg-slate-100 text-slate-700" };
                   return (
                     <div key={inv.id} className="px-5 py-3 flex items-center justify-between">
                       <div>

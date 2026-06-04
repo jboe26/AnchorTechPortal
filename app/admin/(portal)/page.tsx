@@ -1,19 +1,26 @@
 import Link from "next/link";
 import { Users, Briefcase, FileText, CreditCard } from "lucide-react";
-import { prisma } from "@/lib/prisma";
+import { supabase } from "@/lib/supabase";
 
 async function getStats() {
-  const [totalClients, activeProjects, totalInvoices, unpaidInvoices] = await Promise.all([
-    prisma.client.count(),
-    prisma.project.count({ where: { status: "in_progress" } }),
-    prisma.invoice.count(),
-    prisma.invoice.findMany({
-      where: { status: { in: ["unpaid", "overdue"] } },
-      select: { amount: true },
-    }),
+  const [
+    { count: totalClients },
+    { count: activeProjects },
+    { count: totalInvoices },
+    { data: unpaidInvoices },
+  ] = await Promise.all([
+    supabase.from("Client").select("*", { count: "exact", head: true }),
+    supabase.from("Project").select("*", { count: "exact", head: true }).eq("status", "in_progress"),
+    supabase.from("Invoice").select("*", { count: "exact", head: true }),
+    supabase.from("Invoice").select("amount").in("status", ["unpaid", "overdue"]),
   ]);
-  const unpaidAmount = unpaidInvoices.reduce((sum, inv) => sum + inv.amount, 0);
-  return { totalClients, activeProjects, totalInvoices, unpaidAmount };
+  const unpaidAmount = (unpaidInvoices ?? []).reduce((sum: number, inv: any) => sum + inv.amount, 0);
+  return {
+    totalClients: totalClients ?? 0,
+    activeProjects: activeProjects ?? 0,
+    totalInvoices: totalInvoices ?? 0,
+    unpaidAmount,
+  };
 }
 
 export default async function AdminDashboard() {

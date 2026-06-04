@@ -1,11 +1,16 @@
 import "server-only";
 import bcrypt from "bcryptjs";
-import { prisma } from "./prisma";
+import { supabase } from "./supabase";
 import { createSession, deleteSession, getSession } from "./session";
 import { redirect } from "next/navigation";
 
 export async function loginAdmin(email: string, password: string) {
-  const admin = await prisma.adminUser.findUnique({ where: { email } });
+  const { data: admin } = await supabase
+    .from("AdminUser")
+    .select("id, email, password, name")
+    .eq("email", email)
+    .single();
+
   if (!admin) return { error: "Invalid credentials" };
 
   const valid = await bcrypt.compare(password, admin.password);
@@ -16,7 +21,12 @@ export async function loginAdmin(email: string, password: string) {
 }
 
 export async function loginClient(email: string, password: string) {
-  const client = await prisma.client.findUnique({ where: { email } });
+  const { data: client } = await supabase
+    .from("Client")
+    .select("id, email, password, name")
+    .eq("email", email)
+    .single();
+
   if (!client) return { error: "Invalid credentials" };
 
   const valid = await bcrypt.compare(password, client.password);
