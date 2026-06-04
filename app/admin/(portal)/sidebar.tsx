@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Anchor,
   LayoutDashboard,
   Users,
   Briefcase,
@@ -11,6 +10,7 @@ import {
   CreditCard,
   LogOut,
 } from "lucide-react";
+import Image from "next/image";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
@@ -33,8 +33,8 @@ export default function AdminSidebar({ adminName }: { adminName: string }) {
     <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">
       <div className="p-6 border-b border-slate-100">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
-            <Anchor className="w-5 h-5 text-white" />
+          <div className="w-9 h-9 relative">
+            <Image src="/logo.jpg" alt="Logo" fill className="object-contain rounded-lg" />
           </div>
           <div>
             <p className="font-bold text-slate-900 leading-none">AnchorTech</p>

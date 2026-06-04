@@ -1,6 +1,7 @@
 import { requireClient } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Briefcase, FileText, CreditCard, LogOut } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 const projectStatusConfig = {
@@ -40,8 +41,8 @@ export default async function ClientDashboard() {
       <header className="bg-white border-b border-slate-200">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">AT</span>
+            <div className="w-9 h-9 relative">
+              <Image src="/logo.jpg" alt="Logo" fill className="object-contain rounded-lg" />
             </div>
             <div>
               <p className="font-semibold text-slate-900 text-sm leading-none">AnchorTech</p>

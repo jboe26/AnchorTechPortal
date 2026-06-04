@@ -2,7 +2,8 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Anchor, Lock, Mail } from "lucide-react";
+import { Lock, Mail } from "lucide-react";
+import Image from "next/image";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -36,8 +37,8 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
           <div className="flex flex-col items-center mb-8">
-            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-3">
-              <Anchor className="w-6 h-6 text-white" />
+            <div className="w-16 h-16 relative mb-3">
+              <Image src="/logo.jpg" alt="Logo" fill className="object-contain rounded-xl" />
             </div>
             <h1 className="text-2xl font-bold text-slate-900">AnchorTech</h1>
             <p className="text-slate-500 text-sm mt-1">Admin Portal</p>
