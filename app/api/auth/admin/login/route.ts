@@ -17,7 +17,9 @@ export async function POST(req: NextRequest) {
 
     return Response.json({ success: true });
   } catch (err) {
+    const url = process.env.DATABASE_URL ?? "NOT SET";
+    const masked = url.replace(/:([^@]+)@/, ":***@");
     console.error("Admin login error:", err);
-    return Response.json({ error: String(err) }, { status: 500 });
+    return Response.json({ error: String(err), db: masked }, { status: 500 });
   }
 }
