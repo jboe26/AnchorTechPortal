@@ -20,9 +20,17 @@ export function PayPalButton({
   invoiceNumber,
 }: PayPalButtonProps) {
   useEffect(() => {
+    const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+    console.log("PayPal Client ID:", clientId); // Debug log
+
+    if (!clientId) {
+      console.error("PayPal Client ID is not configured");
+      return;
+    }
+
     // Load PayPal SDK
     const script = document.createElement("script");
-    script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}`;
+    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
     script.async = true;
     script.onload = () => {
       if (window.paypal) {
@@ -43,7 +51,6 @@ export function PayPalButton({
               return orderId;
             },
             onApprove: async (data: any, actions: any) => {
-              // PayPal will handle the capture, webhook will update status
               window.location.href = "/client/dashboard?payment=success";
             },
             onError: (error: any) => {
