@@ -2,7 +2,7 @@ import { requireClient } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { Briefcase, FileText, CreditCard, LogOut } from "lucide-react";
 import Image from "next/image";
-import { PayPalButton } from "@/components/paypal-button";
+import { PayPalButton } from "@/app/components/paypal-button";
 
 const projectStatusConfig: Record<
   string,
