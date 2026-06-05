@@ -37,7 +37,7 @@ export async function getPayPalAccessToken(): Promise<string> {
   cachedAccessToken = data.access_token;
   tokenExpiry = Date.now() + data.expires_in * 1000 - 60000; // Refresh 1 min before expiry
 
-  return cachedAccessToken;
+  return cachedAccessToken!;
 }
 
 export async function createPayPalOrder(
