@@ -1,6 +1,7 @@
 import { logout } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export async function POST() {
   await logout();
-  return Response.json({ success: true });
+  redirect("/client/login");
 }
