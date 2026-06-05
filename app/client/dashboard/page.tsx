@@ -2,7 +2,6 @@ import { requireClient } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { Briefcase, FileText, CreditCard, LogOut } from "lucide-react";
 import Image from "next/image";
-import { PayPalButton } from "@/app/components/paypal-button";
 
 const projectStatusConfig: Record<
   string,
@@ -236,13 +235,6 @@ export default async function ClientDashboard() {
                           </span>
                         </div>
                       </div>
-                      {inv.status === "unpaid" && (
-                        <PayPalButton
-                          invoiceId={inv.id}
-                          amount={inv.amount}
-                          invoiceNumber={inv.number}
-                        />
-                      )}
                     </div>
                   );
                 })}
