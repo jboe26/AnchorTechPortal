@@ -34,10 +34,18 @@ export default function AdminSidebar({ adminName }: { adminName: string }) {
       <div className="p-6 border-b border-slate-100">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 relative">
-            <Image src="/logo.jpg" alt="Logo" fill className="object-contain rounded-lg" />
+            <Image
+              src="/logo.jpg"
+              alt="Logo"
+              fill
+              sizes="36px"
+              className="object-contain rounded-lg"
+            />
           </div>
           <div>
-            <p className="font-bold text-slate-900 leading-none">AnchorTech</p>
+            <p className="font-bold text-slate-900 leading-none text-sm whitespace-nowrap">
+              AnchorTech Innovations
+            </p>
             <p className="text-xs text-slate-400 mt-0.5">Admin Portal</p>
           </div>
         </div>
@@ -66,7 +74,9 @@ export default function AdminSidebar({ adminName }: { adminName: string }) {
       <div className="p-4 border-t border-slate-100">
         <div className="px-3 py-2 mb-2">
           <p className="text-xs text-slate-400">Signed in as</p>
-          <p className="text-sm font-medium text-slate-700 truncate">{adminName}</p>
+          <p className="text-sm font-medium text-slate-700 truncate">
+            {adminName}
+          </p>
         </div>
         <button
           onClick={handleLogout}
