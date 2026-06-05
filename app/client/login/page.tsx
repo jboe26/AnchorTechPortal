@@ -38,9 +38,16 @@ export default function ClientLoginPage() {
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
           <div className="flex flex-col items-center mb-8">
             <div className="w-16 h-16 relative mb-3">
-              <Image src="/logo.jpg" alt="Logo" fill className="object-contain rounded-xl" />
+              <Image
+                src="/logo.jpg"
+                alt="Logo"
+                fill
+                className="object-contain rounded-xl"
+              />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900">AnchorTech</h1>
+            <h1 className="text-2xl font-bold text-slate-900">
+              AnchorTech Innovations
+            </h1>
             <p className="text-slate-500 text-sm mt-1">Client Portal</p>
           </div>
 

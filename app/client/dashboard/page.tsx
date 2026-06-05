@@ -2,6 +2,7 @@ import { requireClient } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { Briefcase, FileText, CreditCard, LogOut } from "lucide-react";
 import Image from "next/image";
+import { PayPalButton } from "@/components/paypal-button";
 
 const projectStatusConfig: Record<
   string,
@@ -134,7 +135,7 @@ export default async function ClientDashboard() {
               <FileText className="w-4 h-4 text-amber-500" />
             </div>
             <p className="text-2xl font-bold text-slate-900">
-              ${unpaidAmount.toLocaleString()}
+              ${unpaidAmount.toFixed(2)}
             </p>
           </div>
           <div className="bg-white rounded-xl border border-slate-200 p-5">
@@ -211,28 +212,37 @@ export default async function ClientDashboard() {
                     className: "bg-slate-100 text-slate-700",
                   };
                   return (
-                    <div
-                      key={inv.id}
-                      className="px-5 py-3 flex items-center justify-between"
-                    >
-                      <div>
-                        <p className="text-sm font-medium text-slate-900">
-                          {inv.number}
-                        </p>
-                        <p className="text-xs text-slate-400 mt-0.5">
-                          Due {new Date(inv.dueAt).toLocaleDateString()}
-                        </p>
+                    <div key={inv.id} className="px-5 py-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <div>
+                          <p className="text-sm font-medium text-slate-900">
+                            {inv.number}
+                          </p>
+                          <p className="text-xs text-slate-400 mt-0.5">
+                            Due{" "}
+                            {inv.dueAt
+                              ? new Date(inv.dueAt).toLocaleDateString()
+                              : "No due date"}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-slate-900">
+                            ${inv.amount.toFixed(2)}
+                          </p>
+                          <span
+                            className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${className}`}
+                          >
+                            {label}
+                          </span>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm font-semibold text-slate-900">
-                          ${inv.amount.toLocaleString()}
-                        </p>
-                        <span
-                          className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${className}`}
-                        >
-                          {label}
-                        </span>
-                      </div>
+                      {inv.status === "unpaid" && (
+                        <PayPalButton
+                          invoiceId={inv.id}
+                          amount={inv.amount}
+                          invoiceNumber={inv.number}
+                        />
+                      )}
                     </div>
                   );
                 })}
@@ -251,7 +261,7 @@ export default async function ClientDashboard() {
                   Plan
                 </p>
                 <p className="text-sm text-blue-700 mt-0.5">
-                  ${activeRetainer.price.toLocaleString()}/
+                  ${activeRetainer.price.toFixed(2)}/
                   {activeRetainer.tier === "monthly" ? "mo" : "yr"} · Renews{" "}
                   {new Date(activeRetainer.renewalAt).toLocaleDateString()}
                 </p>
