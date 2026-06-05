@@ -1,3 +1,5 @@
+import 'server-only';
+
 const PAYPAL_API_BASE = "https://api.paypal.com";
 
 let cachedAccessToken: string | null = null;
