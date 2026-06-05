@@ -1,5 +1,3 @@
-"use client";
-
 import { requireClient } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { Briefcase, FileText, CreditCard, LogOut } from "lucide-react";
