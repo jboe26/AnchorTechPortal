@@ -5,15 +5,20 @@ import { createSession, deleteSession, getSession } from "./session";
 import { redirect } from "next/navigation";
 
 export async function loginAdmin(email: string, password: string) {
-  const { data: admin } = await supabase
+  const { data: admin, error: dbError } = await supabase
     .from("AdminUser")
     .select("id, email, password, name")
     .eq("email", email)
     .single();
 
+  console.log("DB error:", dbError);
+  console.log("Admin found:", !!admin);
+  console.log("Stored hash:", admin?.password);
+
   if (!admin) return { error: "Invalid credentials" };
 
   const valid = await bcrypt.compare(password, admin.password);
+  console.log("Password valid:", valid);
   if (!valid) return { error: "Invalid credentials" };
 
   await createSession({ userId: admin.id, role: "admin", email: admin.email, name: admin.name });
