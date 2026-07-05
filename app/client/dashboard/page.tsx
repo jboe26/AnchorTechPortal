@@ -1,24 +1,37 @@
 import { requireClient } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
-import { Briefcase, FileText, CreditCard, LogOut } from "lucide-react";
+import {
+  ArrowRight,
+  BriefcaseBusiness,
+  CreditCard,
+  FileText,
+  LogOut,
+  Sparkles,
+} from "lucide-react";
 import Image from "next/image";
 
 const projectStatusConfig: Record<
   string,
   { label: string; className: string }
 > = {
-  in_progress: { label: "In Progress", className: "bg-blue-100 text-blue-700" },
-  completed: { label: "Completed", className: "bg-green-100 text-green-700" },
-  on_hold: { label: "On Hold", className: "bg-amber-100 text-amber-700" },
+  in_progress: {
+    label: "In Progress",
+    className: "bg-blue-500/15 text-blue-300",
+  },
+  completed: {
+    label: "Completed",
+    className: "bg-emerald-500/15 text-emerald-300",
+  },
+  on_hold: { label: "On Hold", className: "bg-amber-500/15 text-amber-300" },
 };
 
 const invoiceStatusConfig: Record<
   string,
   { label: string; className: string }
 > = {
-  unpaid: { label: "Unpaid", className: "bg-amber-100 text-amber-700" },
-  paid: { label: "Paid", className: "bg-green-100 text-green-700" },
-  overdue: { label: "Overdue", className: "bg-red-100 text-red-700" },
+  unpaid: { label: "Unpaid", className: "bg-amber-500/15 text-amber-300" },
+  paid: { label: "Paid", className: "bg-emerald-500/15 text-emerald-300" },
+  overdue: { label: "Overdue", className: "bg-rose-500/15 text-rose-300" },
 };
 
 export default async function ClientDashboard() {
@@ -53,41 +66,38 @@ export default async function ClientDashboard() {
   ]);
 
   if (!client)
-    return <div className="p-8 text-slate-500">Client not found.</div>;
+    return <div className="p-8 text-slate-300">Client not found.</div>;
 
   const unpaidAmount = (invoices ?? [])
     .filter((i: any) => i.status !== "paid")
-    .reduce((s: number, i: any) => s + i.amount, 0);
-
+    .reduce((sum: number, i: any) => sum + i.amount, 0);
   const activeRetainer = (retainers ?? []).find(
     (r: any) => r.status === "active",
   );
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      <header className="border-b border-slate-200 bg-white/90 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-5 lg:py-6">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 relative">
+            <div className="relative h-10 w-10 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 p-1">
               <Image
                 src="/logo.jpg"
-                alt="Logo"
+                alt="AnchorTech logo"
                 fill
-                className="object-contain rounded-lg"
+                className="object-contain"
               />
             </div>
             <div>
-              <p className="font-semibold text-slate-900 text-sm leading-none">
+              <p className="text-sm font-semibold text-slate-900">
                 AnchorTech Innovations
               </p>
-              <p className="text-xs text-slate-400 mt-0.5">Client Portal</p>
+              <p className="text-xs text-slate-500">Client portal</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <p className="text-sm font-medium text-slate-900">
-                {client.name}
-              </p>
+              <p className="text-sm font-medium text-white">{client.name}</p>
               <p className="text-xs text-slate-400">
                 {client.company ?? client.email}
               </p>
@@ -95,96 +105,115 @@ export default async function ClientDashboard() {
             <form action="/api/auth/logout" method="POST">
               <button
                 type="submit"
-                className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors"
+                className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-sm text-slate-200 transition hover:bg-white/10"
               >
-                <LogOut className="w-4 h-4" />
-                Sign Out
+                <LogOut className="h-4 w-4" />
+                Sign out
               </button>
             </form>
           </div>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 py-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-slate-900">
-            Welcome back, {client.name.split(" ")[0]}
-          </h1>
-          <p className="text-slate-500 text-sm mt-1">
-            Here's an overview of your account
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <div className="bg-white rounded-xl border border-slate-200 p-5">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-slate-500">Active Projects</p>
-              <Briefcase className="w-4 h-4 text-blue-500" />
+      <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-10 lg:px-8">
+        <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm shadow-slate-200">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-500/10 px-3 py-1 text-sm text-blue-200">
+                <Sparkles className="h-4 w-4" />
+                Welcome back
+              </div>
+              <h1 className="text-3xl font-semibold text-white">
+                Hello, {client.name.split(" ")[0]}.
+              </h1>
+              <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-300">
+                Your workspace is now organized around the details that matter
+                most: live projects, upcoming invoices, and your current
+                retainer.
+              </p>
             </div>
-            <p className="text-2xl font-bold text-slate-900">
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-300">
+              <p className="font-medium text-white">Current focus</p>
+              <p className="mt-1">
+                {activeRetainer
+                  ? `AnchorCare ${activeRetainer.tier}`
+                  : "No active retainer"}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="grid gap-6 md:grid-cols-3">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6">
+            <div className="mb-3 flex items-center justify-between">
+              <p className="text-sm text-slate-400">Active projects</p>
+              <BriefcaseBusiness className="h-4 w-4 text-blue-400" />
+            </div>
+            <p className="text-2xl font-semibold text-white">
               {
                 (projects ?? []).filter((p: any) => p.status === "in_progress")
                   .length
               }
             </p>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 p-5">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-slate-500">Unpaid Amount</p>
-              <FileText className="w-4 h-4 text-amber-500" />
+          <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-6">
+            <div className="mb-3 flex items-center justify-between">
+              <p className="text-sm text-slate-400">Outstanding balance</p>
+              <FileText className="h-4 w-4 text-amber-400" />
             </div>
-            <p className="text-2xl font-bold text-slate-900">
+            <p className="text-2xl font-semibold text-white">
               ${unpaidAmount.toFixed(2)}
             </p>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 p-5">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-slate-500">AnchorCare Plan</p>
-              <CreditCard className="w-4 h-4 text-violet-500" />
+          <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-6">
+            <div className="mb-3 flex items-center justify-between">
+              <p className="text-sm text-slate-400">Retainer</p>
+              <CreditCard className="h-4 w-4 text-violet-400" />
             </div>
-            <p className="text-2xl font-bold text-slate-900 capitalize">
+            <p className="text-2xl font-semibold capitalize text-slate-950">
               {activeRetainer ? activeRetainer.tier : "None"}
             </p>
           </div>
-        </div>
+        </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-xl border border-slate-200">
-            <div className="p-5 border-b border-slate-100">
-              <h2 className="font-semibold text-slate-900">Projects</h2>
+        <section className="grid gap-6 lg:grid-cols-2">
+          <div className="rounded-3xl border border-white/10 bg-slate-900/70 p-7">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-white">Projects</h2>
+              <span className="text-sm text-slate-400">
+                {(projects ?? []).length} total
+              </span>
             </div>
             {(projects ?? []).length === 0 ? (
-              <div className="p-8 text-center text-slate-400 text-sm">
+              <p className="rounded-2xl border border-dashed border-white/10 bg-white/5 p-6 text-sm text-slate-400">
                 No projects yet.
-              </div>
+              </p>
             ) : (
-              <div className="divide-y divide-slate-50">
+              <div className="space-y-3">
                 {(projects ?? []).map((p: any) => {
-                  const { label, className } = projectStatusConfig[
-                    p.status
-                  ] ?? {
+                  const config = projectStatusConfig[p.status] ?? {
                     label: p.status,
-                    className: "bg-slate-100 text-slate-700",
+                    className: "bg-slate-500/15 text-slate-300",
                   };
                   return (
                     <div
                       key={p.id}
-                      className="px-5 py-3 flex items-center justify-between"
+                      className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
                     >
                       <div>
-                        <p className="text-sm font-medium text-slate-900">
+                        <p className="text-sm font-medium text-white">
                           {p.title}
                         </p>
-                        {p.description && (
-                          <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">
+                        {p.description ? (
+                          <p className="mt-1 text-xs text-slate-400">
                             {p.description}
                           </p>
-                        )}
+                        ) : null}
                       </div>
                       <span
-                        className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${className}`}
+                        className={`rounded-full px-2.5 py-1 text-xs font-medium ${config.className}`}
                       >
-                        {label}
+                        {config.label}
                       </span>
                     </div>
                   );
@@ -193,47 +222,52 @@ export default async function ClientDashboard() {
             )}
           </div>
 
-          <div className="bg-white rounded-xl border border-slate-200">
-            <div className="p-5 border-b border-slate-100">
-              <h2 className="font-semibold text-slate-900">Invoices</h2>
+          <div className="rounded-3xl border border-white/10 bg-slate-900/70 p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-white">Invoices</h2>
+              <span className="text-sm text-slate-400">
+                {(invoices ?? []).length} total
+              </span>
             </div>
             {(invoices ?? []).length === 0 ? (
-              <div className="p-8 text-center text-slate-400 text-sm">
+              <p className="rounded-2xl border border-dashed border-white/10 bg-white/5 p-6 text-sm text-slate-400">
                 No invoices yet.
-              </div>
+              </p>
             ) : (
-              <div className="divide-y divide-slate-50">
+              <div className="space-y-3">
                 {(invoices ?? []).map((inv: any) => {
-                  const { label, className } = invoiceStatusConfig[
-                    inv.status
-                  ] ?? {
+                  const config = invoiceStatusConfig[inv.status] ?? {
                     label: inv.status,
-                    className: "bg-slate-100 text-slate-700",
+                    className: "bg-slate-500/15 text-slate-300",
                   };
                   return (
-                    <div key={inv.id} className="px-5 py-4">
-                      <div className="flex items-center justify-between mb-3">
+                    <div
+                      key={inv.id}
+                      className="rounded-2xl border border-white/10 bg-white/5 p-4"
+                    >
+                      <div className="mb-3 flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-slate-900">
+                          <p className="text-sm font-medium text-white">
                             {inv.number}
                           </p>
-                          <p className="text-xs text-slate-400 mt-0.5">
+                          <p className="mt-1 text-xs text-slate-400">
                             Due{" "}
                             {inv.dueAt
                               ? new Date(inv.dueAt).toLocaleDateString()
                               : "No due date"}
                           </p>
                         </div>
-                        <div className="text-right">
-                          <p className="text-sm font-semibold text-slate-900">
-                            ${inv.amount.toFixed(2)}
-                          </p>
-                          <span
-                            className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${className}`}
-                          >
-                            {label}
-                          </span>
-                        </div>
+                        <span
+                          className={`rounded-full px-2.5 py-1 text-xs font-medium ${config.className}`}
+                        >
+                          {config.label}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm text-slate-300">
+                        <span>Amount</span>
+                        <span className="font-semibold text-white">
+                          ${inv.amount.toFixed(2)}
+                        </span>
                       </div>
                     </div>
                   );
@@ -241,29 +275,32 @@ export default async function ClientDashboard() {
               </div>
             )}
           </div>
-        </div>
+        </section>
 
-        {activeRetainer && (
-          <div className="mt-6 bg-blue-50 border border-blue-100 rounded-xl p-5">
-            <div className="flex items-center justify-between">
+        {activeRetainer ? (
+          <div className="rounded-3xl border border-cyan-200 bg-cyan-50 p-7">
+            <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="font-semibold text-blue-900">
-                  AnchorCare{" "}
-                  {activeRetainer.tier === "monthly" ? "Monthly" : "Yearly"}{" "}
-                  Plan
+                <p className="text-sm font-medium uppercase tracking-[0.24em] text-blue-200">
+                  AnchorCare
                 </p>
-                <p className="text-sm text-blue-700 mt-0.5">
+                <h2 className="mt-2 text-xl font-semibold text-white">
+                  {activeRetainer.tier === "monthly" ? "Monthly" : "Yearly"}{" "}
+                  plan is active
+                </h2>
+                <p className="mt-2 text-sm text-blue-100">
                   ${activeRetainer.price.toFixed(2)}/
                   {activeRetainer.tier === "monthly" ? "mo" : "yr"} · Renews{" "}
                   {new Date(activeRetainer.renewalAt).toLocaleDateString()}
                 </p>
               </div>
-              <span className="inline-flex px-3 py-1 rounded-full text-sm font-medium bg-blue-600 text-white">
-                Active
-              </span>
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-sm font-medium text-white">
+                <ArrowRight className="h-4 w-4" />
+                Active now
+              </div>
             </div>
           </div>
-        )}
+        ) : null}
       </main>
     </div>
   );

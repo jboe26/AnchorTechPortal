@@ -2,7 +2,8 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, Mail } from "lucide-react";
+import Link from "next/link";
+import { Lock, Mail, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 
 export default function AdminLoginPage() {
@@ -33,79 +34,83 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-          <div className="flex flex-col items-center mb-8">
-            <div className="w-16 h-16 relative mb-3">
-              <Image
-                src="/logo.jpg"
-                alt="Logo"
-                fill
-                className="object-contain rounded-xl"
-              />
-            </div>
-            <h1 className="text-2xl font-bold text-slate-900">
-              AnchorTech Innovations
-            </h1>
-            <p className="text-slate-500 text-sm mt-1">Admin Portal</p>
+    <div className="flex min-h-screen items-center justify-center px-4 py-14 sm:px-6 lg:px-8 bg-slate-50">
+      <div className="w-full max-w-xl rounded-3xl border border-slate-200 bg-white p-10 shadow-xl shadow-slate-200/60">
+        <div className="mb-10 flex flex-col items-center text-center">
+          <div className="relative mb-4 h-16 w-16 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-2">
+            <Image
+              src="/logo.jpg"
+              alt="AnchorTech logo"
+              fill
+              className="object-contain"
+            />
           </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                Email
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="admin@anchortech.org"
-                  className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                Password
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  name="password"
-                  type="password"
-                  required
-                  placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-
-            {error && (
-              <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">
-                {error}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={isPending}
-              className="w-full bg-blue-600 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-60 transition-colors"
-            >
-              {isPending ? "Signing in…" : "Sign In"}
-            </button>
-          </form>
-
-          <p className="text-center text-xs text-slate-400 mt-6">
-            Client?{" "}
-            <a href="/client/login" className="text-blue-600 hover:underline">
-              Sign in here
-            </a>
+          <h1 className="text-2xl font-semibold text-slate-950">
+            Admin access
+          </h1>
+          <p className="mt-2 text-sm text-slate-600">
+            Secure sign-in for your internal operations workspace.
           </p>
         </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-200">
+              Email
+            </label>
+            <div className="relative">
+              <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <input
+                name="email"
+                type="email"
+                required
+                placeholder="admin@anchortech.org"
+                className="w-full rounded-xl border border-slate-200 bg-slate-100 py-2.5 pl-10 pr-4 text-sm text-slate-900 outline-none transition focus:border-cyan-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-200">
+              Password
+            </label>
+            <div className="relative">
+              <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <input
+                name="password"
+                type="password"
+                required
+                placeholder="••••••••"
+                className="w-full rounded-xl border border-slate-200 bg-slate-100 py-2.5 pl-10 pr-4 text-sm text-slate-900 outline-none transition focus:border-cyan-500"
+              />
+            </div>
+          </div>
+
+          {error && (
+            <div className="rounded-xl border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-200">
+              {error}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={isPending}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-60"
+          >
+            <ShieldCheck className="h-4 w-4" />
+            {isPending ? "Signing in…" : "Sign in"}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-slate-400">
+          Need client access?{" "}
+          <Link
+            href="/client/login"
+            className="font-medium text-blue-300 hover:text-blue-200"
+          >
+            Switch portal
+          </Link>
+        </p>
       </div>
     </div>
   );
