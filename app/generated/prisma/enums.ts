@@ -42,3 +42,11 @@ export const RetainerStatus = {
 } as const
 
 export type RetainerStatus = (typeof RetainerStatus)[keyof typeof RetainerStatus]
+
+
+export const NoteSource = {
+  manual: 'manual',
+  assistant: 'assistant'
+} as const
+
+export type NoteSource = (typeof NoteSource)[keyof typeof NoteSource]

@@ -8,26 +8,28 @@ datasource db {
 }
 
 model AdminUser {
-  id        String   @id @default(cuid())
-  email     String   @unique
+  id        String       @id @default(cuid())
+  email     String       @unique
   password  String
   name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  notes     ClientNote[]
 }
 
 model Client {
-  id        String     @id @default(cuid())
-  email     String     @unique
+  id        String       @id @default(cuid())
+  email     String       @unique
   password  String
   name      String
   company   String?
   phone     String?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
   projects  Project[]
   invoices  Invoice[]
   retainers Retainer[]
+  notes     ClientNote[]
 }
 
 model Project {
@@ -42,6 +44,7 @@ model Project {
   updatedAt   DateTime      @updatedAt
   client      Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
   invoices    Invoice[]
+  notes       ClientNote[]
 }
 
 model Invoice {
@@ -72,25 +75,51 @@ model Retainer {
   client    Client         @relation(fields: [clientId], references: [id], onDelete: Cascade)
 }
 
+model ClientNote {
+  id        String     @id @default(cuid())
+  clientId  String
+  projectId String?
+  authorId  String?
+  source    NoteSource @default(manual)
+  content   String
+  createdAt DateTime   @default(now())
+  client    Client     @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  project   Project?   @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  author    AdminUser? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+}
+
 enum ProjectStatus {
   in_progress
   completed
   on_hold
+
+  @@map("project_status")
 }
 
 enum InvoiceStatus {
   unpaid
   paid
   overdue
+
+  @@map("invoice_status")
 }
 
 enum RetainerTier {
   monthly
   yearly
+
+  @@map("retainer_tier")
 }
 
 enum RetainerStatus {
   active
   inactive
   cancelled
+
+  @@map("retainer_status")
+}
+
+enum NoteSource {
+  manual
+  assistant
 }

@@ -42,3 +42,8 @@ export type Invoice = Prisma.InvoiceModel
  * 
  */
 export type Retainer = Prisma.RetainerModel
+/**
+ * Model ClientNote
+ * 
+ */
+export type ClientNote = Prisma.ClientNoteModel

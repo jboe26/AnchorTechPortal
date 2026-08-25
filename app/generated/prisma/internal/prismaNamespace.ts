@@ -388,7 +388,8 @@ export const ModelName = {
   Client: 'Client',
   Project: 'Project',
   Invoice: 'Invoice',
-  Retainer: 'Retainer'
+  Retainer: 'Retainer',
+  ClientNote: 'ClientNote'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -404,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "adminUser" | "client" | "project" | "invoice" | "retainer"
+    modelProps: "adminUser" | "client" | "project" | "invoice" | "retainer" | "clientNote"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -778,6 +779,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ClientNote: {
+      payload: Prisma.$ClientNotePayload<ExtArgs>
+      fields: Prisma.ClientNoteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ClientNoteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientNotePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ClientNoteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientNotePayload>
+        }
+        findFirst: {
+          args: Prisma.ClientNoteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientNotePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ClientNoteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientNotePayload>
+        }
+        findMany: {
+          args: Prisma.ClientNoteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientNotePayload>[]
+        }
+        create: {
+          args: Prisma.ClientNoteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientNotePayload>
+        }
+        createMany: {
+          args: Prisma.ClientNoteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ClientNoteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientNotePayload>[]
+        }
+        delete: {
+          args: Prisma.ClientNoteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientNotePayload>
+        }
+        update: {
+          args: Prisma.ClientNoteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientNotePayload>
+        }
+        deleteMany: {
+          args: Prisma.ClientNoteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ClientNoteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ClientNoteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientNotePayload>[]
+        }
+        upsert: {
+          args: Prisma.ClientNoteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientNotePayload>
+        }
+        aggregate: {
+          args: Prisma.ClientNoteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateClientNote>
+        }
+        groupBy: {
+          args: Prisma.ClientNoteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClientNoteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ClientNoteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClientNoteCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -887,6 +962,19 @@ export const RetainerScalarFieldEnum = {
 } as const
 
 export type RetainerScalarFieldEnum = (typeof RetainerScalarFieldEnum)[keyof typeof RetainerScalarFieldEnum]
+
+
+export const ClientNoteScalarFieldEnum = {
+  id: 'id',
+  clientId: 'clientId',
+  projectId: 'projectId',
+  authorId: 'authorId',
+  source: 'source',
+  content: 'content',
+  createdAt: 'createdAt'
+} as const
+
+export type ClientNoteScalarFieldEnum = (typeof ClientNoteScalarFieldEnum)[keyof typeof ClientNoteScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1018,6 +1106,20 @@ export type ListEnumRetainerStatusFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
+ * Reference to a field of type 'NoteSource'
+ */
+export type EnumNoteSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NoteSource'>
+    
+
+
+/**
+ * Reference to a field of type 'NoteSource[]'
+ */
+export type ListEnumNoteSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NoteSource[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1145,6 +1247,7 @@ export type GlobalOmitConfig = {
   project?: Prisma.ProjectOmit
   invoice?: Prisma.InvoiceOmit
   retainer?: Prisma.RetainerOmit
+  clientNote?: Prisma.ClientNoteOmit
 }
 
 /* Types for Logging */

@@ -55,7 +55,8 @@ export const ModelName = {
   Client: 'Client',
   Project: 'Project',
   Invoice: 'Invoice',
-  Retainer: 'Retainer'
+  Retainer: 'Retainer',
+  ClientNote: 'ClientNote'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -144,6 +145,19 @@ export const RetainerScalarFieldEnum = {
 } as const
 
 export type RetainerScalarFieldEnum = (typeof RetainerScalarFieldEnum)[keyof typeof RetainerScalarFieldEnum]
+
+
+export const ClientNoteScalarFieldEnum = {
+  id: 'id',
+  clientId: 'clientId',
+  projectId: 'projectId',
+  authorId: 'authorId',
+  source: 'source',
+  content: 'content',
+  createdAt: 'createdAt'
+} as const
+
+export type ClientNoteScalarFieldEnum = (typeof ClientNoteScalarFieldEnum)[keyof typeof ClientNoteScalarFieldEnum]
 
 
 export const SortOrder = {

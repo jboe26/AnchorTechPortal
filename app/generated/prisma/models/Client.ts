@@ -209,6 +209,7 @@ export type ClientWhereInput = {
   projects?: Prisma.ProjectListRelationFilter
   invoices?: Prisma.InvoiceListRelationFilter
   retainers?: Prisma.RetainerListRelationFilter
+  notes?: Prisma.ClientNoteListRelationFilter
 }
 
 export type ClientOrderByWithRelationInput = {
@@ -223,6 +224,7 @@ export type ClientOrderByWithRelationInput = {
   projects?: Prisma.ProjectOrderByRelationAggregateInput
   invoices?: Prisma.InvoiceOrderByRelationAggregateInput
   retainers?: Prisma.RetainerOrderByRelationAggregateInput
+  notes?: Prisma.ClientNoteOrderByRelationAggregateInput
 }
 
 export type ClientWhereUniqueInput = Prisma.AtLeast<{
@@ -240,6 +242,7 @@ export type ClientWhereUniqueInput = Prisma.AtLeast<{
   projects?: Prisma.ProjectListRelationFilter
   invoices?: Prisma.InvoiceListRelationFilter
   retainers?: Prisma.RetainerListRelationFilter
+  notes?: Prisma.ClientNoteListRelationFilter
 }, "id" | "email">
 
 export type ClientOrderByWithAggregationInput = {
@@ -282,6 +285,7 @@ export type ClientCreateInput = {
   projects?: Prisma.ProjectCreateNestedManyWithoutClientInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutClientInput
   retainers?: Prisma.RetainerCreateNestedManyWithoutClientInput
+  notes?: Prisma.ClientNoteCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateInput = {
@@ -296,6 +300,7 @@ export type ClientUncheckedCreateInput = {
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutClientInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutClientInput
   retainers?: Prisma.RetainerUncheckedCreateNestedManyWithoutClientInput
+  notes?: Prisma.ClientNoteUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientUpdateInput = {
@@ -310,6 +315,7 @@ export type ClientUpdateInput = {
   projects?: Prisma.ProjectUpdateManyWithoutClientNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutClientNestedInput
   retainers?: Prisma.RetainerUpdateManyWithoutClientNestedInput
+  notes?: Prisma.ClientNoteUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateInput = {
@@ -324,6 +330,7 @@ export type ClientUncheckedUpdateInput = {
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutClientNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutClientNestedInput
   retainers?: Prisma.RetainerUncheckedUpdateManyWithoutClientNestedInput
+  notes?: Prisma.ClientNoteUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateManyInput = {
@@ -443,6 +450,20 @@ export type ClientUpdateOneRequiredWithoutRetainersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ClientUpdateToOneWithWhereWithoutRetainersInput, Prisma.ClientUpdateWithoutRetainersInput>, Prisma.ClientUncheckedUpdateWithoutRetainersInput>
 }
 
+export type ClientCreateNestedOneWithoutNotesInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutNotesInput, Prisma.ClientUncheckedCreateWithoutNotesInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutNotesInput
+  connect?: Prisma.ClientWhereUniqueInput
+}
+
+export type ClientUpdateOneRequiredWithoutNotesNestedInput = {
+  create?: Prisma.XOR<Prisma.ClientCreateWithoutNotesInput, Prisma.ClientUncheckedCreateWithoutNotesInput>
+  connectOrCreate?: Prisma.ClientCreateOrConnectWithoutNotesInput
+  upsert?: Prisma.ClientUpsertWithoutNotesInput
+  connect?: Prisma.ClientWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClientUpdateToOneWithWhereWithoutNotesInput, Prisma.ClientUpdateWithoutNotesInput>, Prisma.ClientUncheckedUpdateWithoutNotesInput>
+}
+
 export type ClientCreateWithoutProjectsInput = {
   id?: string
   email: string
@@ -454,6 +475,7 @@ export type ClientCreateWithoutProjectsInput = {
   updatedAt?: Date | string
   invoices?: Prisma.InvoiceCreateNestedManyWithoutClientInput
   retainers?: Prisma.RetainerCreateNestedManyWithoutClientInput
+  notes?: Prisma.ClientNoteCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutProjectsInput = {
@@ -467,6 +489,7 @@ export type ClientUncheckedCreateWithoutProjectsInput = {
   updatedAt?: Date | string
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutClientInput
   retainers?: Prisma.RetainerUncheckedCreateNestedManyWithoutClientInput
+  notes?: Prisma.ClientNoteUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutProjectsInput = {
@@ -496,6 +519,7 @@ export type ClientUpdateWithoutProjectsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invoices?: Prisma.InvoiceUpdateManyWithoutClientNestedInput
   retainers?: Prisma.RetainerUpdateManyWithoutClientNestedInput
+  notes?: Prisma.ClientNoteUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutProjectsInput = {
@@ -509,6 +533,7 @@ export type ClientUncheckedUpdateWithoutProjectsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutClientNestedInput
   retainers?: Prisma.RetainerUncheckedUpdateManyWithoutClientNestedInput
+  notes?: Prisma.ClientNoteUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutInvoicesInput = {
@@ -522,6 +547,7 @@ export type ClientCreateWithoutInvoicesInput = {
   updatedAt?: Date | string
   projects?: Prisma.ProjectCreateNestedManyWithoutClientInput
   retainers?: Prisma.RetainerCreateNestedManyWithoutClientInput
+  notes?: Prisma.ClientNoteCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutInvoicesInput = {
@@ -535,6 +561,7 @@ export type ClientUncheckedCreateWithoutInvoicesInput = {
   updatedAt?: Date | string
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutClientInput
   retainers?: Prisma.RetainerUncheckedCreateNestedManyWithoutClientInput
+  notes?: Prisma.ClientNoteUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutInvoicesInput = {
@@ -564,6 +591,7 @@ export type ClientUpdateWithoutInvoicesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projects?: Prisma.ProjectUpdateManyWithoutClientNestedInput
   retainers?: Prisma.RetainerUpdateManyWithoutClientNestedInput
+  notes?: Prisma.ClientNoteUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutInvoicesInput = {
@@ -577,6 +605,7 @@ export type ClientUncheckedUpdateWithoutInvoicesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutClientNestedInput
   retainers?: Prisma.RetainerUncheckedUpdateManyWithoutClientNestedInput
+  notes?: Prisma.ClientNoteUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type ClientCreateWithoutRetainersInput = {
@@ -590,6 +619,7 @@ export type ClientCreateWithoutRetainersInput = {
   updatedAt?: Date | string
   projects?: Prisma.ProjectCreateNestedManyWithoutClientInput
   invoices?: Prisma.InvoiceCreateNestedManyWithoutClientInput
+  notes?: Prisma.ClientNoteCreateNestedManyWithoutClientInput
 }
 
 export type ClientUncheckedCreateWithoutRetainersInput = {
@@ -603,6 +633,7 @@ export type ClientUncheckedCreateWithoutRetainersInput = {
   updatedAt?: Date | string
   projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutClientInput
   invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutClientInput
+  notes?: Prisma.ClientNoteUncheckedCreateNestedManyWithoutClientInput
 }
 
 export type ClientCreateOrConnectWithoutRetainersInput = {
@@ -632,6 +663,7 @@ export type ClientUpdateWithoutRetainersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projects?: Prisma.ProjectUpdateManyWithoutClientNestedInput
   invoices?: Prisma.InvoiceUpdateManyWithoutClientNestedInput
+  notes?: Prisma.ClientNoteUpdateManyWithoutClientNestedInput
 }
 
 export type ClientUncheckedUpdateWithoutRetainersInput = {
@@ -645,6 +677,79 @@ export type ClientUncheckedUpdateWithoutRetainersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutClientNestedInput
   invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutClientNestedInput
+  notes?: Prisma.ClientNoteUncheckedUpdateManyWithoutClientNestedInput
+}
+
+export type ClientCreateWithoutNotesInput = {
+  id?: string
+  email: string
+  password: string
+  name: string
+  company?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  projects?: Prisma.ProjectCreateNestedManyWithoutClientInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutClientInput
+  retainers?: Prisma.RetainerCreateNestedManyWithoutClientInput
+}
+
+export type ClientUncheckedCreateWithoutNotesInput = {
+  id?: string
+  email: string
+  password: string
+  name: string
+  company?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutClientInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutClientInput
+  retainers?: Prisma.RetainerUncheckedCreateNestedManyWithoutClientInput
+}
+
+export type ClientCreateOrConnectWithoutNotesInput = {
+  where: Prisma.ClientWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClientCreateWithoutNotesInput, Prisma.ClientUncheckedCreateWithoutNotesInput>
+}
+
+export type ClientUpsertWithoutNotesInput = {
+  update: Prisma.XOR<Prisma.ClientUpdateWithoutNotesInput, Prisma.ClientUncheckedUpdateWithoutNotesInput>
+  create: Prisma.XOR<Prisma.ClientCreateWithoutNotesInput, Prisma.ClientUncheckedCreateWithoutNotesInput>
+  where?: Prisma.ClientWhereInput
+}
+
+export type ClientUpdateToOneWithWhereWithoutNotesInput = {
+  where?: Prisma.ClientWhereInput
+  data: Prisma.XOR<Prisma.ClientUpdateWithoutNotesInput, Prisma.ClientUncheckedUpdateWithoutNotesInput>
+}
+
+export type ClientUpdateWithoutNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUpdateManyWithoutClientNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutClientNestedInput
+  retainers?: Prisma.RetainerUpdateManyWithoutClientNestedInput
+}
+
+export type ClientUncheckedUpdateWithoutNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutClientNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutClientNestedInput
+  retainers?: Prisma.RetainerUncheckedUpdateManyWithoutClientNestedInput
 }
 
 
@@ -656,12 +761,14 @@ export type ClientCountOutputType = {
   projects: number
   invoices: number
   retainers: number
+  notes: number
 }
 
 export type ClientCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   projects?: boolean | ClientCountOutputTypeCountProjectsArgs
   invoices?: boolean | ClientCountOutputTypeCountInvoicesArgs
   retainers?: boolean | ClientCountOutputTypeCountRetainersArgs
+  notes?: boolean | ClientCountOutputTypeCountNotesArgs
 }
 
 /**
@@ -695,6 +802,13 @@ export type ClientCountOutputTypeCountRetainersArgs<ExtArgs extends runtime.Type
   where?: Prisma.RetainerWhereInput
 }
 
+/**
+ * ClientCountOutputType without action
+ */
+export type ClientCountOutputTypeCountNotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClientNoteWhereInput
+}
+
 
 export type ClientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -708,6 +822,7 @@ export type ClientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   projects?: boolean | Prisma.Client$projectsArgs<ExtArgs>
   invoices?: boolean | Prisma.Client$invoicesArgs<ExtArgs>
   retainers?: boolean | Prisma.Client$retainersArgs<ExtArgs>
+  notes?: boolean | Prisma.Client$notesArgs<ExtArgs>
   _count?: boolean | Prisma.ClientCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["client"]>
 
@@ -749,6 +864,7 @@ export type ClientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   projects?: boolean | Prisma.Client$projectsArgs<ExtArgs>
   invoices?: boolean | Prisma.Client$invoicesArgs<ExtArgs>
   retainers?: boolean | Prisma.Client$retainersArgs<ExtArgs>
+  notes?: boolean | Prisma.Client$notesArgs<ExtArgs>
   _count?: boolean | Prisma.ClientCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ClientIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -760,6 +876,7 @@ export type $ClientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     projects: Prisma.$ProjectPayload<ExtArgs>[]
     invoices: Prisma.$InvoicePayload<ExtArgs>[]
     retainers: Prisma.$RetainerPayload<ExtArgs>[]
+    notes: Prisma.$ClientNotePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1167,6 +1284,7 @@ export interface Prisma__ClientClient<T, Null = never, ExtArgs extends runtime.T
   projects<T extends Prisma.Client$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invoices<T extends Prisma.Client$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   retainers<T extends Prisma.Client$retainersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$retainersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RetainerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notes<T extends Prisma.Client$notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Client$notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1666,6 +1784,30 @@ export type Client$retainersArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.RetainerScalarFieldEnum | Prisma.RetainerScalarFieldEnum[]
+}
+
+/**
+ * Client.notes
+ */
+export type Client$notesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClientNote
+   */
+  select?: Prisma.ClientNoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClientNote
+   */
+  omit?: Prisma.ClientNoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientNoteInclude<ExtArgs> | null
+  where?: Prisma.ClientNoteWhereInput
+  orderBy?: Prisma.ClientNoteOrderByWithRelationInput | Prisma.ClientNoteOrderByWithRelationInput[]
+  cursor?: Prisma.ClientNoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClientNoteScalarFieldEnum | Prisma.ClientNoteScalarFieldEnum[]
 }
 
 /**
