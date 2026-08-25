@@ -5,12 +5,13 @@ import { createSession, deleteSession, getSession } from "./session";
 import { redirect } from "next/navigation";
 
 export async function loginAdmin(email: string, password: string) {
-  const { data: admin } = await supabase
+  const { data: admin, error: fetchError } = await supabase
     .from("AdminUser")
     .select("id, email, password, name")
     .eq("email", email)
     .single();
 
+  if (fetchError) console.error("[loginAdmin] Supabase fetch error:", fetchError.message, fetchError.code);
   if (!admin) return { error: "Invalid credentials" };
 
   const valid = await bcrypt.compare(password, admin.password);
@@ -21,12 +22,13 @@ export async function loginAdmin(email: string, password: string) {
 }
 
 export async function loginClient(email: string, password: string) {
-  const { data: client } = await supabase
+  const { data: client, error: fetchError } = await supabase
     .from("Client")
     .select("id, email, password, name")
     .eq("email", email)
     .single();
 
+  if (fetchError) console.error("[loginClient] Supabase fetch error:", fetchError.message, fetchError.code);
   if (!client) return { error: "Invalid credentials" };
 
   const valid = await bcrypt.compare(password, client.password);
