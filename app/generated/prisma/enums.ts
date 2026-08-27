@@ -59,3 +59,11 @@ export const NoteVisibility = {
 } as const
 
 export type NoteVisibility = (typeof NoteVisibility)[keyof typeof NoteVisibility]
+
+
+export const ChatRole = {
+  user: 'user',
+  assistant: 'assistant'
+} as const
+
+export type ChatRole = (typeof ChatRole)[keyof typeof ChatRole]

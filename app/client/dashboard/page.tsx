@@ -1,14 +1,30 @@
 import { requireClient } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import {
-  ArrowRight,
   BriefcaseBusiness,
+  Check,
   CreditCard,
   FileText,
   LogOut,
-  Sparkles,
 } from "lucide-react";
 import Image from "next/image";
+import { ChatPanel } from "./chat-panel";
+
+const retainerFeatures: Record<string, string[]> = {
+  monthly: [
+    "Unlimited small edits (content, images, wording, tweaks)",
+    "Monthly updates + backups",
+    "Security + performance monitoring",
+    "Priority response",
+  ],
+  yearly: [
+    "Unlimited small edits",
+    "Full yearly maintenance + backups",
+    "Performance + SEO tune-ups",
+    "Minor fixes throughout the year",
+    "Optional 30-minute strategy call",
+  ],
+};
 
 const projectStatusConfig: Record<
   string,
@@ -16,22 +32,22 @@ const projectStatusConfig: Record<
 > = {
   in_progress: {
     label: "In Progress",
-    className: "bg-blue-500/15 text-blue-300",
+    className: "bg-blue-50 text-blue-700",
   },
   completed: {
     label: "Completed",
-    className: "bg-emerald-500/15 text-emerald-300",
+    className: "bg-emerald-50 text-emerald-700",
   },
-  on_hold: { label: "On Hold", className: "bg-amber-500/15 text-amber-300" },
+  on_hold: { label: "On Hold", className: "bg-amber-50 text-amber-700" },
 };
 
 const invoiceStatusConfig: Record<
   string,
   { label: string; className: string }
 > = {
-  unpaid: { label: "Unpaid", className: "bg-amber-500/15 text-amber-300" },
-  paid: { label: "Paid", className: "bg-emerald-500/15 text-emerald-300" },
-  overdue: { label: "Overdue", className: "bg-rose-500/15 text-rose-300" },
+  unpaid: { label: "Unpaid", className: "bg-amber-50 text-amber-700" },
+  paid: { label: "Paid", className: "bg-emerald-50 text-emerald-700" },
+  overdue: { label: "Overdue", className: "bg-rose-50 text-rose-700" },
 };
 
 export default async function ClientDashboard() {
@@ -97,15 +113,15 @@ export default async function ClientDashboard() {
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <p className="text-sm font-medium text-white">{client.name}</p>
-              <p className="text-xs text-slate-400">
+              <p className="text-sm font-medium text-slate-900">{client.name}</p>
+              <p className="text-xs text-slate-500">
                 {client.company ?? client.email}
               </p>
             </div>
             <form action="/api/auth/logout" method="POST">
               <button
                 type="submit"
-                className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-sm text-slate-200 transition hover:bg-white/10"
+                className="flex items-center gap-2 rounded-full border border-slate-200 px-3 py-2 text-sm text-slate-600 transition hover:bg-slate-100"
               >
                 <LogOut className="h-4 w-4" />
                 Sign out
@@ -119,22 +135,21 @@ export default async function ClientDashboard() {
         <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm shadow-slate-200">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-500/10 px-3 py-1 text-sm text-blue-200">
-                <Sparkles className="h-4 w-4" />
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700">
                 Welcome back
               </div>
-              <h1 className="text-3xl font-semibold text-white">
+              <h1 className="text-3xl font-semibold text-slate-900">
                 Hello, {client.name.split(" ")[0]}.
               </h1>
-              <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-300">
+              <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
                 Your workspace is now organized around the details that matter
                 most: live projects, upcoming invoices, and your current
                 retainer.
               </p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-300">
-              <p className="font-medium text-white">Current focus</p>
-              <p className="mt-1">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+              <p className="font-medium text-slate-900">Your plan</p>
+              <p className="mt-1 capitalize">
                 {activeRetainer
                   ? `AnchorCare ${activeRetainer.tier}`
                   : "No active retainer"}
@@ -146,46 +161,46 @@ export default async function ClientDashboard() {
         <section className="grid gap-6 md:grid-cols-3">
           <div className="rounded-2xl border border-slate-200 bg-white p-6">
             <div className="mb-3 flex items-center justify-between">
-              <p className="text-sm text-slate-400">Active projects</p>
-              <BriefcaseBusiness className="h-4 w-4 text-blue-400" />
+              <p className="text-sm text-slate-500">Active projects</p>
+              <BriefcaseBusiness className="h-4 w-4 text-blue-500" />
             </div>
-            <p className="text-2xl font-semibold text-white">
+            <p className="text-2xl font-semibold text-slate-900">
               {
                 (projects ?? []).filter((p: any) => p.status === "in_progress")
                   .length
               }
             </p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-6">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6">
             <div className="mb-3 flex items-center justify-between">
-              <p className="text-sm text-slate-400">Outstanding balance</p>
-              <FileText className="h-4 w-4 text-amber-400" />
+              <p className="text-sm text-slate-500">Outstanding balance</p>
+              <FileText className="h-4 w-4 text-amber-500" />
             </div>
-            <p className="text-2xl font-semibold text-white">
+            <p className="text-2xl font-semibold text-slate-900">
               ${unpaidAmount.toFixed(2)}
             </p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-6">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6">
             <div className="mb-3 flex items-center justify-between">
-              <p className="text-sm text-slate-400">Retainer</p>
-              <CreditCard className="h-4 w-4 text-violet-400" />
+              <p className="text-sm text-slate-500">Retainer</p>
+              <CreditCard className="h-4 w-4 text-violet-500" />
             </div>
-            <p className="text-2xl font-semibold capitalize text-slate-950">
+            <p className="text-2xl font-semibold capitalize text-slate-900">
               {activeRetainer ? activeRetainer.tier : "None"}
             </p>
           </div>
         </section>
 
         <section className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-3xl border border-white/10 bg-slate-900/70 p-7">
+          <div className="rounded-3xl border border-slate-200 bg-white p-7">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-white">Projects</h2>
-              <span className="text-sm text-slate-400">
+              <h2 className="text-lg font-semibold text-slate-900">Projects</h2>
+              <span className="text-sm text-slate-500">
                 {(projects ?? []).length} total
               </span>
             </div>
             {(projects ?? []).length === 0 ? (
-              <p className="rounded-2xl border border-dashed border-white/10 bg-white/5 p-6 text-sm text-slate-400">
+              <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-sm text-slate-500">
                 No projects yet.
               </p>
             ) : (
@@ -193,19 +208,19 @@ export default async function ClientDashboard() {
                 {(projects ?? []).map((p: any) => {
                   const config = projectStatusConfig[p.status] ?? {
                     label: p.status,
-                    className: "bg-slate-500/15 text-slate-300",
+                    className: "bg-slate-100 text-slate-600",
                   };
                   return (
                     <div
                       key={p.id}
-                      className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
+                      className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3"
                     >
                       <div>
-                        <p className="text-sm font-medium text-white">
+                        <p className="text-sm font-medium text-slate-900">
                           {p.title}
                         </p>
                         {p.description ? (
-                          <p className="mt-1 text-xs text-slate-400">
+                          <p className="mt-1 text-xs text-slate-500">
                             {p.description}
                           </p>
                         ) : null}
@@ -222,15 +237,15 @@ export default async function ClientDashboard() {
             )}
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-slate-900/70 p-6">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-white">Invoices</h2>
-              <span className="text-sm text-slate-400">
+              <h2 className="text-lg font-semibold text-slate-900">Invoices</h2>
+              <span className="text-sm text-slate-500">
                 {(invoices ?? []).length} total
               </span>
             </div>
             {(invoices ?? []).length === 0 ? (
-              <p className="rounded-2xl border border-dashed border-white/10 bg-white/5 p-6 text-sm text-slate-400">
+              <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-sm text-slate-500">
                 No invoices yet.
               </p>
             ) : (
@@ -238,19 +253,19 @@ export default async function ClientDashboard() {
                 {(invoices ?? []).map((inv: any) => {
                   const config = invoiceStatusConfig[inv.status] ?? {
                     label: inv.status,
-                    className: "bg-slate-500/15 text-slate-300",
+                    className: "bg-slate-100 text-slate-600",
                   };
                   return (
                     <div
                       key={inv.id}
-                      className="rounded-2xl border border-white/10 bg-white/5 p-4"
+                      className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
                     >
                       <div className="mb-3 flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-white">
+                          <p className="text-sm font-medium text-slate-900">
                             {inv.number}
                           </p>
-                          <p className="mt-1 text-xs text-slate-400">
+                          <p className="mt-1 text-xs text-slate-500">
                             Due{" "}
                             {inv.dueAt
                               ? new Date(inv.dueAt).toLocaleDateString()
@@ -263,9 +278,9 @@ export default async function ClientDashboard() {
                           {config.label}
                         </span>
                       </div>
-                      <div className="flex items-center justify-between text-sm text-slate-300">
+                      <div className="flex items-center justify-between text-sm text-slate-600">
                         <span>Amount</span>
-                        <span className="font-semibold text-white">
+                        <span className="font-semibold text-slate-900">
                           ${inv.amount.toFixed(2)}
                         </span>
                       </div>
@@ -277,26 +292,41 @@ export default async function ClientDashboard() {
           </div>
         </section>
 
+        <ChatPanel />
+
         {activeRetainer ? (
-          <div className="rounded-3xl border border-cyan-200 bg-cyan-50 p-7">
+          <div className="rounded-3xl border border-slate-200 bg-white p-7">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="text-sm font-medium uppercase tracking-[0.24em] text-blue-200">
+                <p className="text-sm font-medium uppercase tracking-[0.24em] text-slate-500">
                   AnchorCare
                 </p>
-                <h2 className="mt-2 text-xl font-semibold text-white">
+                <h2 className="mt-2 text-xl font-semibold text-slate-900">
                   {activeRetainer.tier === "monthly" ? "Monthly" : "Yearly"}{" "}
                   plan is active
                 </h2>
-                <p className="mt-2 text-sm text-blue-100">
+                <p className="mt-2 text-sm text-slate-600">
                   ${activeRetainer.price.toFixed(2)}/
                   {activeRetainer.tier === "monthly" ? "mo" : "yr"} · Renews{" "}
                   {new Date(activeRetainer.renewalAt).toLocaleDateString()}
                 </p>
+                <ul className="mt-4 space-y-1.5">
+                  {(retainerFeatures[activeRetainer.tier] ?? []).map(
+                    (feature) => (
+                      <li
+                        key={feature}
+                        className="flex items-start gap-2 text-sm text-slate-700"
+                      >
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                        {feature}
+                      </li>
+                    ),
+                  )}
+                </ul>
               </div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-sm font-medium text-white">
-                <ArrowRight className="h-4 w-4" />
-                Active now
+              <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-2 text-sm font-medium text-slate-700">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                Active
               </div>
             </div>
           </div>

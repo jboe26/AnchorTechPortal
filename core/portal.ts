@@ -1,5 +1,5 @@
 import type { PrismaClient } from "../app/generated/prisma/client";
-import { type Scope, resolveClientId, isForeign } from "./scope.js";
+import { type Scope, resolveClientId, isForeign } from "./scope";
 
 export type ProjectStatus = "in_progress" | "completed" | "on_hold";
 export type InvoiceStatus = "unpaid" | "paid" | "overdue";

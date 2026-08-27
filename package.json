@@ -11,9 +11,10 @@
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
     "mcp": "tsx mcp/server.ts",
-    "test": "tsx --test core/*.test.ts"
+    "test": "tsx --test core/*.test.ts lib/chat/*.test.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.121.0",
     "@modelcontextprotocol/sdk": "^1.30.0",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",

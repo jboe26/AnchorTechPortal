@@ -110,13 +110,13 @@ async function main() {
 
   await Promise.all([
     prisma.retainer.create({
-      data: { tier: "monthly", price: 800, status: "active", clientId: clientA.id, renewalAt: daysFromNow(10) },
+      data: { tier: "monthly", price: 49, status: "active", clientId: clientA.id, renewalAt: daysFromNow(10) },
     }),
     prisma.retainer.create({
-      data: { tier: "yearly", price: 9000, status: "active", clientId: clientB.id, renewalAt: daysFromNow(45) },
+      data: { tier: "yearly", price: 429, status: "active", clientId: clientB.id, renewalAt: daysFromNow(45) },
     }),
     prisma.retainer.create({
-      data: { tier: "monthly", price: 600, status: "cancelled", clientId: clientC.id, renewalAt: daysFromNow(-5) },
+      data: { tier: "monthly", price: 49, status: "cancelled", clientId: clientC.id, renewalAt: daysFromNow(-5) },
     }),
   ]);
 

@@ -30,6 +30,7 @@ model Client {
   invoices  Invoice[]
   retainers Retainer[]
   notes     ClientNote[]
+  chatMessages ClientChatMessage[]
 }
 
 model Project {
@@ -131,4 +132,25 @@ enum NoteSource {
 enum NoteVisibility {
   internal
   shared
+}
+
+enum ChatRole {
+  user
+  assistant
+
+  @@map("chat_role")
+}
+
+/// One running transcript per client. `content` stores Anthropic message
+/// content blocks (text / tool_use / tool_result) verbatim, so a persisted row
+/// can be replayed straight back into the next turn's request.
+model ClientChatMessage {
+  id        String   @id @default(cuid())
+  clientId  String
+  role      ChatRole
+  content   Json
+  createdAt DateTime @default(now())
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([clientId, createdAt])
 }

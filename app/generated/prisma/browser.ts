@@ -47,3 +47,10 @@ export type Retainer = Prisma.RetainerModel
  * 
  */
 export type ClientNote = Prisma.ClientNoteModel
+/**
+ * Model ClientChatMessage
+ * One running transcript per client. `content` stores Anthropic message
+ * content blocks (text / tool_use / tool_result) verbatim, so a persisted row
+ * can be replayed straight back into the next turn's request.
+ */
+export type ClientChatMessage = Prisma.ClientChatMessageModel
