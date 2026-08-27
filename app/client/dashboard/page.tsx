@@ -6,6 +6,7 @@ import {
   CreditCard,
   FileText,
   LogOut,
+  ShieldCheck,
 } from "lucide-react";
 import Image from "next/image";
 import { ChatPanel } from "./chat-panel";
@@ -92,9 +93,9 @@ export default async function ClientDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <header className="border-b border-slate-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-5 lg:py-6">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-slate-100 text-slate-900">
+      <div className="mx-auto max-w-6xl px-6 pt-6 lg:px-8">
+        <header className="flex flex-wrap items-center justify-between gap-4 rounded-full border border-slate-200 bg-white px-6 py-4 shadow-sm shadow-slate-200/60">
           <div className="flex items-center gap-3">
             <div className="relative h-10 w-10 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 p-1">
               <Image
@@ -128,32 +129,60 @@ export default async function ClientDashboard() {
               </button>
             </form>
           </div>
-        </div>
-      </header>
+        </header>
+      </div>
 
-      <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-10 lg:px-8">
-        <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm shadow-slate-200">
-          <div className="flex flex-wrap items-center justify-between gap-4">
+      <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-8 lg:px-8">
+        <section className="overflow-hidden rounded-3xl bg-slate-800 p-8 shadow-lg shadow-slate-900/10">
+          <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
             <div>
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-700">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-indigo-100">
                 Welcome back
               </div>
-              <h1 className="text-3xl font-semibold text-slate-900">
+              <h1 className="text-3xl font-semibold text-white lg:text-4xl">
                 Hello, {client.name.split(" ")[0]}.
               </h1>
-              <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
-                Your workspace is now organized around the details that matter
+              <p className="mt-3 max-w-xl text-sm leading-7 text-slate-300">
+                Your workspace is organized around the details that matter
                 most: live projects, upcoming invoices, and your current
                 retainer.
               </p>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white">
+                  {activeRetainer
+                    ? `AnchorCare ${activeRetainer.tier}`
+                    : "No active retainer"}
+                </span>
+                <span className="rounded-full border border-white/20 px-4 py-2 text-sm text-slate-200">
+                  {client.company ?? client.email}
+                </span>
+              </div>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-              <p className="font-medium text-slate-900">Your plan</p>
-              <p className="mt-1 capitalize">
-                {activeRetainer
-                  ? `AnchorCare ${activeRetainer.tier}`
-                  : "No active retainer"}
-              </p>
+            <div className="rounded-2xl bg-white p-6">
+              <div className="mb-4 flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 text-indigo-600" />
+                <h2 className="text-sm font-semibold text-slate-900">
+                  Your plan
+                </h2>
+              </div>
+              <div className="space-y-3">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-xs text-slate-500">Plan</p>
+                  <p className="mt-1 text-sm font-medium capitalize text-slate-900">
+                    {activeRetainer
+                      ? `AnchorCare ${activeRetainer.tier}`
+                      : "None"}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                  <p className="text-xs text-slate-500">Renews</p>
+                  <p className="mt-1 text-sm font-medium text-slate-900">
+                    {activeRetainer
+                      ? new Date(activeRetainer.renewalAt).toLocaleDateString()
+                      : "—"}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -162,7 +191,7 @@ export default async function ClientDashboard() {
           <div className="rounded-2xl border border-slate-200 bg-white p-6">
             <div className="mb-3 flex items-center justify-between">
               <p className="text-sm text-slate-500">Active projects</p>
-              <BriefcaseBusiness className="h-4 w-4 text-blue-500" />
+              <BriefcaseBusiness className="h-4 w-4 text-indigo-500" />
             </div>
             <p className="text-2xl font-semibold text-slate-900">
               {
@@ -183,7 +212,7 @@ export default async function ClientDashboard() {
           <div className="rounded-2xl border border-slate-200 bg-white p-6">
             <div className="mb-3 flex items-center justify-between">
               <p className="text-sm text-slate-500">Retainer</p>
-              <CreditCard className="h-4 w-4 text-violet-500" />
+              <CreditCard className="h-4 w-4 text-indigo-500" />
             </div>
             <p className="text-2xl font-semibold capitalize text-slate-900">
               {activeRetainer ? activeRetainer.tier : "None"}
