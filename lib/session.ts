@@ -2,9 +2,15 @@ import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-const SECRET = new TextEncoder().encode(
-  process.env.SESSION_SECRET ?? "fallback-secret-change-me"
-);
+function secret() {
+  const value = process.env.SESSION_SECRET;
+  if (!value) {
+    throw new Error(
+      "SESSION_SECRET is not set. Refusing to sign or verify sessions with a default key."
+    );
+  }
+  return new TextEncoder().encode(value);
+}
 
 export type SessionPayload = {
   userId: string;
@@ -18,7 +24,7 @@ export async function createSession(payload: SessionPayload) {
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("7d")
-    .sign(SECRET);
+    .sign(secret());
 
   const cookieStore = await cookies();
   cookieStore.set("session", token, {
@@ -35,8 +41,9 @@ export async function getSession(): Promise<SessionPayload | null> {
   const token = cookieStore.get("session")?.value;
   if (!token) return null;
 
+  const key = secret();
   try {
-    const { payload } = await jwtVerify(token, SECRET);
+    const { payload } = await jwtVerify(token, key);
     return payload as unknown as SessionPayload;
   } catch {
     return null;
