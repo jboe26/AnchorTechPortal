@@ -1,51 +1,38 @@
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { prisma } from "../db.js";
+import type { PortalCore } from "../../core/portal.js";
 
 function text(data: unknown) {
   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
 }
 
-function pending(summary: string, change: unknown) {
-  return text({
-    status: "pending_confirmation",
-    summary,
-    change,
-    instructions: "No changes have been made. Present this to the user and call this tool again with confirm: true only after they explicitly approve it.",
-  });
-}
-
-export function registerWriteTools(server: McpServer) {
+/**
+ * Write tools are a thin transport shell over the portal core. The two-step
+ * confirmation lives in the core rather than here, so no adapter can offer a
+ * write that skips it.
+ */
+export function registerWriteTools(server: McpServer, core: PortalCore) {
   server.registerTool(
     "update_project_status",
     {
       title: "Update project status",
-      description: "Change a project's status. Requires confirm: true to apply — the first call without it returns a preview of the change.",
+      description:
+        "Change a project's status. Requires confirm: true to apply — the first call without it returns a preview of the change.",
       inputSchema: {
         projectId: z.string(),
         status: z.enum(["in_progress", "completed", "on_hold"]),
         confirm: z.boolean().default(false),
       },
     },
-    async ({ projectId, status, confirm }) => {
-      const project = await prisma.project.findUnique({ where: { id: projectId } });
-      if (!project) return text({ error: "No project found." });
-
-      const change = { projectId, title: project.title, from: project.status, to: status };
-      if (!confirm) {
-        return pending(`Set project "${project.title}" (${projectId}) status: ${project.status} -> ${status}`, change);
-      }
-
-      const updated = await prisma.project.update({ where: { id: projectId }, data: { status } });
-      return text({ status: "applied", project: updated });
-    }
+    async (args) => text(await core.updateProjectStatus(args))
   );
 
   server.registerTool(
     "create_invoice",
     {
       title: "Create invoice",
-      description: "Create a new invoice for a client. Requires confirm: true to apply — the first call without it returns a preview of the change.",
+      description:
+        "Create a new invoice for a client. Requires confirm: true to apply — the first call without it returns a preview of the change.",
       inputSchema: {
         clientId: z.string(),
         amount: z.number().positive(),
@@ -54,99 +41,39 @@ export function registerWriteTools(server: McpServer) {
         confirm: z.boolean().default(false),
       },
     },
-    async ({ clientId, amount, dueAt, projectId, confirm }) => {
-      const client = await prisma.client.findUnique({ where: { id: clientId } });
-      if (!client) return text({ error: "No client found." });
-      if (projectId) {
-        const project = await prisma.project.findUnique({ where: { id: projectId } });
-        if (!project) return text({ error: "No project found." });
-      }
-
-      const year = new Date().getFullYear();
-      const yearPrefix = `INV-${year}-`;
-
-      if (!confirm) {
-        const change = { clientId, clientName: client.name, projectId, amount, dueAt, number: `${yearPrefix}NNN (assigned on confirm)` };
-        return pending(`Create invoice for ${client.name}: $${amount.toFixed(2)}, due ${dueAt}`, change);
-      }
-
-      const existing = await prisma.invoice.findMany({
-        where: { number: { startsWith: yearPrefix } },
-        select: { number: true },
-      });
-      const maxSeq = existing.reduce((max, { number }) => {
-        const seq = parseInt(number.slice(yearPrefix.length), 10);
-        return Number.isFinite(seq) && seq > max ? seq : max;
-      }, 0);
-      const number = `${yearPrefix}${String(maxSeq + 1).padStart(3, "0")}`;
-
-      const invoice = await prisma.invoice.create({
-        data: { number, amount, dueAt: new Date(dueAt), clientId, projectId },
-      });
-      return text({ status: "applied", invoice });
-    }
+    async (args) => text(await core.createInvoice(args))
   );
 
   server.registerTool(
     "mark_invoice_paid",
     {
       title: "Mark invoice paid",
-      description: "Mark an invoice as paid. Requires confirm: true to apply — the first call without it returns a preview of the change.",
+      description:
+        "Mark an invoice as paid. Requires confirm: true to apply — the first call without it returns a preview of the change.",
       inputSchema: {
         invoiceId: z.string(),
         paidAt: z.string().describe("ISO 8601 date").optional(),
         confirm: z.boolean().default(false),
       },
     },
-    async ({ invoiceId, paidAt, confirm }) => {
-      const invoice = await prisma.invoice.findUnique({ where: { id: invoiceId } });
-      if (!invoice) return text({ error: "No invoice found." });
-      if (invoice.status === "paid") return text({ error: `Invoice ${invoice.number} is already paid.` });
-
-      const resolvedPaidAt = paidAt ? new Date(paidAt) : new Date();
-      const change = { invoiceId, number: invoice.number, amount: invoice.amount, paidAt: resolvedPaidAt.toISOString() };
-      if (!confirm) {
-        return pending(`Mark invoice ${invoice.number} ($${invoice.amount.toFixed(2)}) paid as of ${resolvedPaidAt.toISOString()}`, change);
-      }
-
-      const updated = await prisma.invoice.update({
-        where: { id: invoiceId },
-        data: { status: "paid", paidAt: resolvedPaidAt },
-      });
-      return text({ status: "applied", invoice: updated });
-    }
+    async (args) => text(await core.markInvoicePaid(args))
   );
 
   server.registerTool(
     "add_client_note",
     {
       title: "Add client note",
-      description: "Append a note to a client's history. Requires confirm: true to apply — the first call without it returns a preview of the change.",
+      description:
+        "Append a note to a client's history. Notes are internal unless visibility is set to shared. Requires confirm: true to apply — the first call without it returns a preview of the change.",
       inputSchema: {
         clientId: z.string(),
         content: z.string(),
         projectId: z.string().optional(),
         source: z.enum(["manual", "assistant"]).default("assistant"),
+        visibility: z.enum(["internal", "shared"]).default("internal"),
         confirm: z.boolean().default(false),
       },
     },
-    async ({ clientId, content, projectId, source, confirm }) => {
-      const client = await prisma.client.findUnique({ where: { id: clientId } });
-      if (!client) return text({ error: "No client found." });
-      if (projectId) {
-        const project = await prisma.project.findUnique({ where: { id: projectId } });
-        if (!project) return text({ error: "No project found." });
-      }
-
-      const change = { clientId, clientName: client.name, projectId, source, content };
-      if (!confirm) {
-        return pending(`Add ${source} note to ${client.name}: "${content}"`, change);
-      }
-
-      const note = await prisma.clientNote.create({
-        data: { clientId, content, projectId, source },
-      });
-      return text({ status: "applied", note });
-    }
+    async (args) => text(await core.addClientNote(args))
   );
 }

@@ -46,7 +46,16 @@ export type RetainerStatus = (typeof RetainerStatus)[keyof typeof RetainerStatus
 
 export const NoteSource = {
   manual: 'manual',
-  assistant: 'assistant'
+  assistant: 'assistant',
+  client: 'client'
 } as const
 
 export type NoteSource = (typeof NoteSource)[keyof typeof NoteSource]
+
+
+export const NoteVisibility = {
+  internal: 'internal',
+  shared: 'shared'
+} as const
+
+export type NoteVisibility = (typeof NoteVisibility)[keyof typeof NoteVisibility]

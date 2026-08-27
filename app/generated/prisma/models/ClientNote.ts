@@ -30,6 +30,7 @@ export type ClientNoteMinAggregateOutputType = {
   projectId: string | null
   authorId: string | null
   source: $Enums.NoteSource | null
+  visibility: $Enums.NoteVisibility | null
   content: string | null
   createdAt: Date | null
 }
@@ -40,6 +41,7 @@ export type ClientNoteMaxAggregateOutputType = {
   projectId: string | null
   authorId: string | null
   source: $Enums.NoteSource | null
+  visibility: $Enums.NoteVisibility | null
   content: string | null
   createdAt: Date | null
 }
@@ -50,6 +52,7 @@ export type ClientNoteCountAggregateOutputType = {
   projectId: number
   authorId: number
   source: number
+  visibility: number
   content: number
   createdAt: number
   _all: number
@@ -62,6 +65,7 @@ export type ClientNoteMinAggregateInputType = {
   projectId?: true
   authorId?: true
   source?: true
+  visibility?: true
   content?: true
   createdAt?: true
 }
@@ -72,6 +76,7 @@ export type ClientNoteMaxAggregateInputType = {
   projectId?: true
   authorId?: true
   source?: true
+  visibility?: true
   content?: true
   createdAt?: true
 }
@@ -82,6 +87,7 @@ export type ClientNoteCountAggregateInputType = {
   projectId?: true
   authorId?: true
   source?: true
+  visibility?: true
   content?: true
   createdAt?: true
   _all?: true
@@ -165,6 +171,7 @@ export type ClientNoteGroupByOutputType = {
   projectId: string | null
   authorId: string | null
   source: $Enums.NoteSource
+  visibility: $Enums.NoteVisibility
   content: string
   createdAt: Date
   _count: ClientNoteCountAggregateOutputType | null
@@ -196,6 +203,7 @@ export type ClientNoteWhereInput = {
   projectId?: Prisma.StringNullableFilter<"ClientNote"> | string | null
   authorId?: Prisma.StringNullableFilter<"ClientNote"> | string | null
   source?: Prisma.EnumNoteSourceFilter<"ClientNote"> | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFilter<"ClientNote"> | $Enums.NoteVisibility
   content?: Prisma.StringFilter<"ClientNote"> | string
   createdAt?: Prisma.DateTimeFilter<"ClientNote"> | Date | string
   client?: Prisma.XOR<Prisma.ClientScalarRelationFilter, Prisma.ClientWhereInput>
@@ -209,6 +217,7 @@ export type ClientNoteOrderByWithRelationInput = {
   projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   authorId?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
   content?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   client?: Prisma.ClientOrderByWithRelationInput
@@ -225,6 +234,7 @@ export type ClientNoteWhereUniqueInput = Prisma.AtLeast<{
   projectId?: Prisma.StringNullableFilter<"ClientNote"> | string | null
   authorId?: Prisma.StringNullableFilter<"ClientNote"> | string | null
   source?: Prisma.EnumNoteSourceFilter<"ClientNote"> | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFilter<"ClientNote"> | $Enums.NoteVisibility
   content?: Prisma.StringFilter<"ClientNote"> | string
   createdAt?: Prisma.DateTimeFilter<"ClientNote"> | Date | string
   client?: Prisma.XOR<Prisma.ClientScalarRelationFilter, Prisma.ClientWhereInput>
@@ -238,6 +248,7 @@ export type ClientNoteOrderByWithAggregationInput = {
   projectId?: Prisma.SortOrderInput | Prisma.SortOrder
   authorId?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
   content?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ClientNoteCountOrderByAggregateInput
@@ -254,6 +265,7 @@ export type ClientNoteScalarWhereWithAggregatesInput = {
   projectId?: Prisma.StringNullableWithAggregatesFilter<"ClientNote"> | string | null
   authorId?: Prisma.StringNullableWithAggregatesFilter<"ClientNote"> | string | null
   source?: Prisma.EnumNoteSourceWithAggregatesFilter<"ClientNote"> | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityWithAggregatesFilter<"ClientNote"> | $Enums.NoteVisibility
   content?: Prisma.StringWithAggregatesFilter<"ClientNote"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ClientNote"> | Date | string
 }
@@ -261,6 +273,7 @@ export type ClientNoteScalarWhereWithAggregatesInput = {
 export type ClientNoteCreateInput = {
   id?: string
   source?: $Enums.NoteSource
+  visibility?: $Enums.NoteVisibility
   content: string
   createdAt?: Date | string
   client: Prisma.ClientCreateNestedOneWithoutNotesInput
@@ -274,6 +287,7 @@ export type ClientNoteUncheckedCreateInput = {
   projectId?: string | null
   authorId?: string | null
   source?: $Enums.NoteSource
+  visibility?: $Enums.NoteVisibility
   content: string
   createdAt?: Date | string
 }
@@ -281,6 +295,7 @@ export type ClientNoteUncheckedCreateInput = {
 export type ClientNoteUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumNoteSourceFieldUpdateOperationsInput | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFieldUpdateOperationsInput | $Enums.NoteVisibility
   content?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientUpdateOneRequiredWithoutNotesNestedInput
@@ -294,6 +309,7 @@ export type ClientNoteUncheckedUpdateInput = {
   projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumNoteSourceFieldUpdateOperationsInput | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFieldUpdateOperationsInput | $Enums.NoteVisibility
   content?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -304,6 +320,7 @@ export type ClientNoteCreateManyInput = {
   projectId?: string | null
   authorId?: string | null
   source?: $Enums.NoteSource
+  visibility?: $Enums.NoteVisibility
   content: string
   createdAt?: Date | string
 }
@@ -311,6 +328,7 @@ export type ClientNoteCreateManyInput = {
 export type ClientNoteUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumNoteSourceFieldUpdateOperationsInput | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFieldUpdateOperationsInput | $Enums.NoteVisibility
   content?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -321,6 +339,7 @@ export type ClientNoteUncheckedUpdateManyInput = {
   projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumNoteSourceFieldUpdateOperationsInput | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFieldUpdateOperationsInput | $Enums.NoteVisibility
   content?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -341,6 +360,7 @@ export type ClientNoteCountOrderByAggregateInput = {
   projectId?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
   content?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -351,6 +371,7 @@ export type ClientNoteMaxOrderByAggregateInput = {
   projectId?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
   content?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -361,6 +382,7 @@ export type ClientNoteMinOrderByAggregateInput = {
   projectId?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
   content?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -495,9 +517,14 @@ export type EnumNoteSourceFieldUpdateOperationsInput = {
   set?: $Enums.NoteSource
 }
 
+export type EnumNoteVisibilityFieldUpdateOperationsInput = {
+  set?: $Enums.NoteVisibility
+}
+
 export type ClientNoteCreateWithoutAuthorInput = {
   id?: string
   source?: $Enums.NoteSource
+  visibility?: $Enums.NoteVisibility
   content: string
   createdAt?: Date | string
   client: Prisma.ClientCreateNestedOneWithoutNotesInput
@@ -509,6 +536,7 @@ export type ClientNoteUncheckedCreateWithoutAuthorInput = {
   clientId: string
   projectId?: string | null
   source?: $Enums.NoteSource
+  visibility?: $Enums.NoteVisibility
   content: string
   createdAt?: Date | string
 }
@@ -548,6 +576,7 @@ export type ClientNoteScalarWhereInput = {
   projectId?: Prisma.StringNullableFilter<"ClientNote"> | string | null
   authorId?: Prisma.StringNullableFilter<"ClientNote"> | string | null
   source?: Prisma.EnumNoteSourceFilter<"ClientNote"> | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFilter<"ClientNote"> | $Enums.NoteVisibility
   content?: Prisma.StringFilter<"ClientNote"> | string
   createdAt?: Prisma.DateTimeFilter<"ClientNote"> | Date | string
 }
@@ -555,6 +584,7 @@ export type ClientNoteScalarWhereInput = {
 export type ClientNoteCreateWithoutClientInput = {
   id?: string
   source?: $Enums.NoteSource
+  visibility?: $Enums.NoteVisibility
   content: string
   createdAt?: Date | string
   project?: Prisma.ProjectCreateNestedOneWithoutNotesInput
@@ -566,6 +596,7 @@ export type ClientNoteUncheckedCreateWithoutClientInput = {
   projectId?: string | null
   authorId?: string | null
   source?: $Enums.NoteSource
+  visibility?: $Enums.NoteVisibility
   content: string
   createdAt?: Date | string
 }
@@ -599,6 +630,7 @@ export type ClientNoteUpdateManyWithWhereWithoutClientInput = {
 export type ClientNoteCreateWithoutProjectInput = {
   id?: string
   source?: $Enums.NoteSource
+  visibility?: $Enums.NoteVisibility
   content: string
   createdAt?: Date | string
   client: Prisma.ClientCreateNestedOneWithoutNotesInput
@@ -610,6 +642,7 @@ export type ClientNoteUncheckedCreateWithoutProjectInput = {
   clientId: string
   authorId?: string | null
   source?: $Enums.NoteSource
+  visibility?: $Enums.NoteVisibility
   content: string
   createdAt?: Date | string
 }
@@ -645,6 +678,7 @@ export type ClientNoteCreateManyAuthorInput = {
   clientId: string
   projectId?: string | null
   source?: $Enums.NoteSource
+  visibility?: $Enums.NoteVisibility
   content: string
   createdAt?: Date | string
 }
@@ -652,6 +686,7 @@ export type ClientNoteCreateManyAuthorInput = {
 export type ClientNoteUpdateWithoutAuthorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumNoteSourceFieldUpdateOperationsInput | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFieldUpdateOperationsInput | $Enums.NoteVisibility
   content?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientUpdateOneRequiredWithoutNotesNestedInput
@@ -663,6 +698,7 @@ export type ClientNoteUncheckedUpdateWithoutAuthorInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumNoteSourceFieldUpdateOperationsInput | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFieldUpdateOperationsInput | $Enums.NoteVisibility
   content?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -672,6 +708,7 @@ export type ClientNoteUncheckedUpdateManyWithoutAuthorInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumNoteSourceFieldUpdateOperationsInput | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFieldUpdateOperationsInput | $Enums.NoteVisibility
   content?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -681,6 +718,7 @@ export type ClientNoteCreateManyClientInput = {
   projectId?: string | null
   authorId?: string | null
   source?: $Enums.NoteSource
+  visibility?: $Enums.NoteVisibility
   content: string
   createdAt?: Date | string
 }
@@ -688,6 +726,7 @@ export type ClientNoteCreateManyClientInput = {
 export type ClientNoteUpdateWithoutClientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumNoteSourceFieldUpdateOperationsInput | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFieldUpdateOperationsInput | $Enums.NoteVisibility
   content?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   project?: Prisma.ProjectUpdateOneWithoutNotesNestedInput
@@ -699,6 +738,7 @@ export type ClientNoteUncheckedUpdateWithoutClientInput = {
   projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumNoteSourceFieldUpdateOperationsInput | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFieldUpdateOperationsInput | $Enums.NoteVisibility
   content?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -708,6 +748,7 @@ export type ClientNoteUncheckedUpdateManyWithoutClientInput = {
   projectId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumNoteSourceFieldUpdateOperationsInput | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFieldUpdateOperationsInput | $Enums.NoteVisibility
   content?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -717,6 +758,7 @@ export type ClientNoteCreateManyProjectInput = {
   clientId: string
   authorId?: string | null
   source?: $Enums.NoteSource
+  visibility?: $Enums.NoteVisibility
   content: string
   createdAt?: Date | string
 }
@@ -724,6 +766,7 @@ export type ClientNoteCreateManyProjectInput = {
 export type ClientNoteUpdateWithoutProjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumNoteSourceFieldUpdateOperationsInput | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFieldUpdateOperationsInput | $Enums.NoteVisibility
   content?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.ClientUpdateOneRequiredWithoutNotesNestedInput
@@ -735,6 +778,7 @@ export type ClientNoteUncheckedUpdateWithoutProjectInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumNoteSourceFieldUpdateOperationsInput | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFieldUpdateOperationsInput | $Enums.NoteVisibility
   content?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -744,6 +788,7 @@ export type ClientNoteUncheckedUpdateManyWithoutProjectInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumNoteSourceFieldUpdateOperationsInput | $Enums.NoteSource
+  visibility?: Prisma.EnumNoteVisibilityFieldUpdateOperationsInput | $Enums.NoteVisibility
   content?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -756,6 +801,7 @@ export type ClientNoteSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   projectId?: boolean
   authorId?: boolean
   source?: boolean
+  visibility?: boolean
   content?: boolean
   createdAt?: boolean
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
@@ -769,6 +815,7 @@ export type ClientNoteSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   projectId?: boolean
   authorId?: boolean
   source?: boolean
+  visibility?: boolean
   content?: boolean
   createdAt?: boolean
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
@@ -782,6 +829,7 @@ export type ClientNoteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   projectId?: boolean
   authorId?: boolean
   source?: boolean
+  visibility?: boolean
   content?: boolean
   createdAt?: boolean
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
@@ -795,11 +843,12 @@ export type ClientNoteSelectScalar = {
   projectId?: boolean
   authorId?: boolean
   source?: boolean
+  visibility?: boolean
   content?: boolean
   createdAt?: boolean
 }
 
-export type ClientNoteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "projectId" | "authorId" | "source" | "content" | "createdAt", ExtArgs["result"]["clientNote"]>
+export type ClientNoteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientId" | "projectId" | "authorId" | "source" | "visibility" | "content" | "createdAt", ExtArgs["result"]["clientNote"]>
 export type ClientNoteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ClientNote$projectArgs<ExtArgs>
@@ -829,6 +878,7 @@ export type $ClientNotePayload<ExtArgs extends runtime.Types.Extensions.Internal
     projectId: string | null
     authorId: string | null
     source: $Enums.NoteSource
+    visibility: $Enums.NoteVisibility
     content: string
     createdAt: Date
   }, ExtArgs["result"]["clientNote"]>
@@ -1262,6 +1312,7 @@ export interface ClientNoteFieldRefs {
   readonly projectId: Prisma.FieldRef<"ClientNote", 'String'>
   readonly authorId: Prisma.FieldRef<"ClientNote", 'String'>
   readonly source: Prisma.FieldRef<"ClientNote", 'NoteSource'>
+  readonly visibility: Prisma.FieldRef<"ClientNote", 'NoteVisibility'>
   readonly content: Prisma.FieldRef<"ClientNote", 'String'>
   readonly createdAt: Prisma.FieldRef<"ClientNote", 'DateTime'>
 }

@@ -153,6 +153,7 @@ export const ClientNoteScalarFieldEnum = {
   projectId: 'projectId',
   authorId: 'authorId',
   source: 'source',
+  visibility: 'visibility',
   content: 'content',
   createdAt: 'createdAt'
 } as const

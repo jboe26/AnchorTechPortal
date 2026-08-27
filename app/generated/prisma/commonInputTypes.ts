@@ -237,6 +237,13 @@ export type EnumNoteSourceFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumNoteSourceFilter<$PrismaModel> | $Enums.NoteSource
 }
 
+export type EnumNoteVisibilityFilter<$PrismaModel = never> = {
+  equals?: $Enums.NoteVisibility | Prisma.EnumNoteVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.NoteVisibility[] | Prisma.ListEnumNoteVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.NoteVisibility[] | Prisma.ListEnumNoteVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumNoteVisibilityFilter<$PrismaModel> | $Enums.NoteVisibility
+}
+
 export type EnumNoteSourceWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.NoteSource | Prisma.EnumNoteSourceFieldRefInput<$PrismaModel>
   in?: $Enums.NoteSource[] | Prisma.ListEnumNoteSourceFieldRefInput<$PrismaModel>
@@ -245,6 +252,16 @@ export type EnumNoteSourceWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumNoteSourceFilter<$PrismaModel>
   _max?: Prisma.NestedEnumNoteSourceFilter<$PrismaModel>
+}
+
+export type EnumNoteVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.NoteVisibility | Prisma.EnumNoteVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.NoteVisibility[] | Prisma.ListEnumNoteVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.NoteVisibility[] | Prisma.ListEnumNoteVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumNoteVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.NoteVisibility
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNoteVisibilityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNoteVisibilityFilter<$PrismaModel>
 }
 
 export type NestedStringFilter<$PrismaModel = never> = {
@@ -483,6 +500,13 @@ export type NestedEnumNoteSourceFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumNoteSourceFilter<$PrismaModel> | $Enums.NoteSource
 }
 
+export type NestedEnumNoteVisibilityFilter<$PrismaModel = never> = {
+  equals?: $Enums.NoteVisibility | Prisma.EnumNoteVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.NoteVisibility[] | Prisma.ListEnumNoteVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.NoteVisibility[] | Prisma.ListEnumNoteVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumNoteVisibilityFilter<$PrismaModel> | $Enums.NoteVisibility
+}
+
 export type NestedEnumNoteSourceWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.NoteSource | Prisma.EnumNoteSourceFieldRefInput<$PrismaModel>
   in?: $Enums.NoteSource[] | Prisma.ListEnumNoteSourceFieldRefInput<$PrismaModel>
@@ -491,6 +515,16 @@ export type NestedEnumNoteSourceWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumNoteSourceFilter<$PrismaModel>
   _max?: Prisma.NestedEnumNoteSourceFilter<$PrismaModel>
+}
+
+export type NestedEnumNoteVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.NoteVisibility | Prisma.EnumNoteVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.NoteVisibility[] | Prisma.ListEnumNoteVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.NoteVisibility[] | Prisma.ListEnumNoteVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumNoteVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.NoteVisibility
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNoteVisibilityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNoteVisibilityFilter<$PrismaModel>
 }
 
 

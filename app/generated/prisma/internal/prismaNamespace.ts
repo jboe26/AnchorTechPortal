@@ -970,6 +970,7 @@ export const ClientNoteScalarFieldEnum = {
   projectId: 'projectId',
   authorId: 'authorId',
   source: 'source',
+  visibility: 'visibility',
   content: 'content',
   createdAt: 'createdAt'
 } as const
@@ -1116,6 +1117,20 @@ export type EnumNoteSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  * Reference to a field of type 'NoteSource[]'
  */
 export type ListEnumNoteSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NoteSource[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NoteVisibility'
+ */
+export type EnumNoteVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NoteVisibility'>
+    
+
+
+/**
+ * Reference to a field of type 'NoteVisibility[]'
+ */
+export type ListEnumNoteVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NoteVisibility[]'>
     
 
 

@@ -1,5 +1,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { prisma } from "./db.js";
+import { createPortalCore } from "../core/portal.js";
+import { adminScope } from "../core/scope.js";
 import { registerReadTools } from "./tools/read.js";
 import { registerWriteTools } from "./tools/write.js";
 
@@ -8,8 +11,13 @@ const server = new McpServer({
   version: "0.1.0",
 });
 
-registerReadTools(server);
-registerWriteTools(server);
+// Stdio serves the portal owner on their own machine, so this adapter runs at
+// admin scope. A client-facing adapter constructs the core with a client scope
+// instead, and inherits every rule enforced inside it.
+const core = createPortalCore(prisma, adminScope());
+
+registerReadTools(server, core);
+registerWriteTools(server, core);
 
 async function main() {
   const transport = new StdioServerTransport();

@@ -120,24 +120,27 @@ async function main() {
     }),
   ]);
 
+  // Notes deliberately cover both visibilities. The internal ones read like real
+  // internal commentary so that anything client-facing built on this data fails
+  // visibly in dev if the visibility filter is ever dropped.
   await Promise.all([
     prisma.clientNote.create({
-      data: { clientId: clientA.id, projectId: projA1.id, authorId: admin.id, source: "manual", content: "Kickoff call went well, client wants a phased rollout." },
+      data: { clientId: clientA.id, projectId: projA1.id, authorId: admin.id, source: "manual", visibility: "internal", content: "Slow to approve copy, chase twice before the next milestone." },
     }),
     prisma.clientNote.create({
-      data: { clientId: clientA.id, projectId: projA2.id, source: "assistant", content: "SEO audit flagged 12 broken links; summary sent to client." },
+      data: { clientId: clientA.id, projectId: projA2.id, source: "assistant", visibility: "shared", content: "SEO audit complete. 12 broken links found and fixed." },
     }),
     prisma.clientNote.create({
-      data: { clientId: clientB.id, projectId: projB1.id, authorId: admin.id, source: "manual", content: "Brand refresh paused pending client budget approval." },
+      data: { clientId: clientB.id, projectId: projB1.id, authorId: admin.id, source: "manual", visibility: "internal", content: "Budget looks shaky this quarter, do not staff the next phase until the retainer renews." },
     }),
     prisma.clientNote.create({
-      data: { clientId: clientB.id, source: "assistant", content: "Retainer renewal reminder sent 45 days ahead of schedule." },
+      data: { clientId: clientB.id, projectId: projB1.id, source: "assistant", visibility: "shared", content: "Brand refresh is on hold pending your budget approval." },
     }),
     prisma.clientNote.create({
-      data: { clientId: clientC.id, projectId: projC1.id, authorId: admin.id, source: "manual", content: "Dashboard requirements finalized after second review." },
+      data: { clientId: clientC.id, projectId: projC1.id, authorId: admin.id, source: "manual", visibility: "internal", content: "Third round of requirement changes, flag scope creep at the next review." },
     }),
     prisma.clientNote.create({
-      data: { clientId: clientC.id, projectId: projC2.id, source: "assistant", content: "Data migration completed; verified row counts match source." },
+      data: { clientId: clientC.id, projectId: projC2.id, source: "assistant", visibility: "shared", content: "Data migration completed. Row counts verified against the source system." },
     }),
   ]);
 
