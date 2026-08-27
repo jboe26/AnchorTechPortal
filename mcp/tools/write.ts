@@ -57,14 +57,29 @@ export function registerWriteTools(server: McpServer) {
     async ({ clientId, amount, dueAt, projectId, confirm }) => {
       const client = await prisma.client.findUnique({ where: { id: clientId } });
       if (!client) return text({ error: "No client found." });
+      if (projectId) {
+        const project = await prisma.project.findUnique({ where: { id: projectId } });
+        if (!project) return text({ error: "No project found." });
+      }
 
-      const change = { clientId, clientName: client.name, projectId, amount, dueAt };
+      const year = new Date().getFullYear();
+      const yearPrefix = `INV-${year}-`;
+
       if (!confirm) {
+        const change = { clientId, clientName: client.name, projectId, amount, dueAt, number: `${yearPrefix}NNN (assigned on confirm)` };
         return pending(`Create invoice for ${client.name}: $${amount.toFixed(2)}, due ${dueAt}`, change);
       }
 
-      const count = await prisma.invoice.count();
-      const number = `INV-${String(count + 1).padStart(5, "0")}`;
+      const existing = await prisma.invoice.findMany({
+        where: { number: { startsWith: yearPrefix } },
+        select: { number: true },
+      });
+      const maxSeq = existing.reduce((max, { number }) => {
+        const seq = parseInt(number.slice(yearPrefix.length), 10);
+        return Number.isFinite(seq) && seq > max ? seq : max;
+      }, 0);
+      const number = `${yearPrefix}${String(maxSeq + 1).padStart(3, "0")}`;
+
       const invoice = await prisma.invoice.create({
         data: { number, amount, dueAt: new Date(dueAt), clientId, projectId },
       });
@@ -86,6 +101,7 @@ export function registerWriteTools(server: McpServer) {
     async ({ invoiceId, paidAt, confirm }) => {
       const invoice = await prisma.invoice.findUnique({ where: { id: invoiceId } });
       if (!invoice) return text({ error: "No invoice found." });
+      if (invoice.status === "paid") return text({ error: `Invoice ${invoice.number} is already paid.` });
 
       const resolvedPaidAt = paidAt ? new Date(paidAt) : new Date();
       const change = { invoiceId, number: invoice.number, amount: invoice.amount, paidAt: resolvedPaidAt.toISOString() };
@@ -117,6 +133,10 @@ export function registerWriteTools(server: McpServer) {
     async ({ clientId, content, projectId, source, confirm }) => {
       const client = await prisma.client.findUnique({ where: { id: clientId } });
       if (!client) return text({ error: "No client found." });
+      if (projectId) {
+        const project = await prisma.project.findUnique({ where: { id: projectId } });
+        if (!project) return text({ error: "No project found." });
+      }
 
       const change = { clientId, clientName: client.name, projectId, source, content };
       if (!confirm) {

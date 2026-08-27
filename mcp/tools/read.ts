@@ -21,7 +21,8 @@ export function registerReadTools(server: McpServer) {
     "get_client",
     {
       title: "Get client",
-      description: "Look up a client by id, email, or name. Returns the client record (never the password hash).",
+      description:
+        "Read-only. Look up a client by id, email, or name. id/email are exact matches; name is a case-insensitive partial match and can return up to 10 results. Never returns the password hash.",
       inputSchema: {
         id: z.string().optional(),
         email: z.string().optional(),
@@ -32,7 +33,7 @@ export function registerReadTools(server: McpServer) {
       if (!id && !email && !name) {
         return text({ error: "Provide at least one of id, email, or name." });
       }
-      const client = await prisma.client.findFirst({
+      const clients = await prisma.client.findMany({
         where: {
           OR: [
             id ? { id } : undefined,
@@ -41,8 +42,9 @@ export function registerReadTools(server: McpServer) {
           ].filter(Boolean) as object[],
         },
         select: CLIENT_SELECT,
+        take: 10,
       });
-      return text(client ?? { error: "No client found." });
+      return text(clients.length ? clients : { error: "No client found." });
     }
   );
 
@@ -50,7 +52,7 @@ export function registerReadTools(server: McpServer) {
     "list_projects",
     {
       title: "List projects",
-      description: "List projects, optionally filtered by client and/or status.",
+      description: "Read-only. List projects, optionally filtered by client and/or status, joined with client name.",
       inputSchema: {
         clientId: z.string().optional(),
         status: z.enum(["in_progress", "completed", "on_hold"]).optional(),
@@ -60,6 +62,7 @@ export function registerReadTools(server: McpServer) {
       const projects = await prisma.project.findMany({
         where: { clientId, status },
         orderBy: { updatedAt: "desc" },
+        include: { client: { select: { name: true } } },
       });
       return text(projects);
     }
@@ -69,11 +72,17 @@ export function registerReadTools(server: McpServer) {
     "get_project_status",
     {
       title: "Get project status",
-      description: "Fetch a single project's full detail by id.",
+      description: "Read-only. Fetch a single project's full detail by id, including its client name and its invoices.",
       inputSchema: { projectId: z.string() },
     },
     async ({ projectId }) => {
-      const project = await prisma.project.findUnique({ where: { id: projectId } });
+      const project = await prisma.project.findUnique({
+        where: { id: projectId },
+        include: {
+          client: { select: { name: true } },
+          invoices: { select: { number: true, amount: true, status: true, dueAt: true } },
+        },
+      });
       return text(project ?? { error: "No project found." });
     }
   );
@@ -82,7 +91,8 @@ export function registerReadTools(server: McpServer) {
     "list_invoices",
     {
       title: "List invoices",
-      description: "List invoices, optionally filtered by client and/or status. Use status to surface unpaid/overdue invoices.",
+      description:
+        "Read-only. List invoices, optionally filtered by client and/or status, joined with client name and project title. Includes a computed totalAmount for the filtered set.",
       inputSchema: {
         clientId: z.string().optional(),
         status: z.enum(["unpaid", "paid", "overdue"]).optional(),
@@ -92,8 +102,10 @@ export function registerReadTools(server: McpServer) {
       const invoices = await prisma.invoice.findMany({
         where: { clientId, status },
         orderBy: { dueAt: "asc" },
+        include: { client: { select: { name: true } }, project: { select: { title: true } } },
       });
-      return text(invoices);
+      const totalAmount = invoices.reduce((sum, invoice) => sum + invoice.amount, 0);
+      return text({ invoices, totalAmount });
     }
   );
 
@@ -101,13 +113,14 @@ export function registerReadTools(server: McpServer) {
     "get_retainer_status",
     {
       title: "Get retainer status",
-      description: "Fetch retainer detail(s), optionally scoped to a single client.",
+      description: "Read-only. Fetch retainer detail(s) joined with client name, optionally scoped to a single client.",
       inputSchema: { clientId: z.string().optional() },
     },
     async ({ clientId }) => {
       const retainers = await prisma.retainer.findMany({
         where: { clientId },
         orderBy: { renewalAt: "asc" },
+        include: { client: { select: { name: true } } },
       });
       return text(retainers);
     }
@@ -117,7 +130,7 @@ export function registerReadTools(server: McpServer) {
     "list_upcoming_renewals",
     {
       title: "List upcoming renewals",
-      description: "List active retainers whose renewalAt falls within the given number of days from now.",
+      description: "Read-only. List active retainers, joined with client name, whose renewalAt falls within the given number of days from now.",
       inputSchema: { withinDays: z.number().int().positive() },
     },
     async ({ withinDays }) => {
@@ -126,6 +139,7 @@ export function registerReadTools(server: McpServer) {
       const retainers = await prisma.retainer.findMany({
         where: { status: "active", renewalAt: { gte: now, lte: until } },
         orderBy: { renewalAt: "asc" },
+        include: { client: { select: { name: true } } },
       });
       return text(retainers);
     }
@@ -135,16 +149,20 @@ export function registerReadTools(server: McpServer) {
     "list_client_notes",
     {
       title: "List client notes",
-      description: "Chronological note history for a client, optionally scoped to a project.",
+      description:
+        "Read-only. Chronological note history for a client (newest first), optionally scoped to a project, joined with author name where present. Defaults to the 20 most recent notes.",
       inputSchema: {
         clientId: z.string(),
         projectId: z.string().optional(),
+        limit: z.number().int().positive().max(100).default(20),
       },
     },
-    async ({ clientId, projectId }) => {
+    async ({ clientId, projectId, limit }) => {
       const notes = await prisma.clientNote.findMany({
         where: { clientId, projectId },
         orderBy: { createdAt: "desc" },
+        take: limit,
+        include: { author: { select: { name: true } } },
       });
       return text(notes);
     }
