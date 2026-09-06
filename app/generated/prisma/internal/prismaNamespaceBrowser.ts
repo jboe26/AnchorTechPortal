@@ -57,6 +57,8 @@ export const ModelName = {
   Invoice: 'Invoice',
   Retainer: 'Retainer',
   ClientNote: 'ClientNote',
+  Session: 'Session',
+  Event: 'Event',
   ClientChatMessage: 'ClientChatMessage'
 } as const
 
@@ -160,6 +162,29 @@ export const ClientNoteScalarFieldEnum = {
 } as const
 
 export type ClientNoteScalarFieldEnum = (typeof ClientNoteScalarFieldEnum)[keyof typeof ClientNoteScalarFieldEnum]
+
+
+export const SessionScalarFieldEnum = {
+  id: 'id',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  summary: 'summary'
+} as const
+
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
+export const EventScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  type: 'type',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  summary: 'summary',
+  createdAt: 'createdAt'
+} as const
+
+export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
 export const ClientChatMessageScalarFieldEnum = {

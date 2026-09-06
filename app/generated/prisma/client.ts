@@ -72,6 +72,19 @@ export type Retainer = Prisma.RetainerModel
  */
 export type ClientNote = Prisma.ClientNoteModel
 /**
+ * Model Session
+ * One row per Anchor OS working session, so the console can open already
+ * knowing what happened last time instead of starting cold.
+ */
+export type Session = Prisma.SessionModel
+/**
+ * Model Event
+ * Append-only log of what Anchor OS did in a session — both reads the
+ * console surfaced and writes it made — so a session's summary can be
+ * generated from real activity rather than guessed.
+ */
+export type Event = Prisma.EventModel
+/**
  * Model ClientChatMessage
  * One running transcript per client. `content` stores Anthropic message
  * content blocks (text / tool_use / tool_result) verbatim, so a persisted row
